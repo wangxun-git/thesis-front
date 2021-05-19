@@ -43,11 +43,10 @@ const user = {
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
-          console.log(response)
           const data = response.OUT_DATA.data
           if (data.roles !== null ) { // 验证返回的roles是否是一个非空数组
             const code = data.T_ROLE.T_ROLE_CODE
-            commit('SET_ROLES', data.T_ROLE.T_ROLE_CODE)
+            commit('SET_ROLES', code)
           } else {
             reject('getInfo: roles must be a non-null array !')
           }

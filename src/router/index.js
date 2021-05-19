@@ -25,16 +25,40 @@ export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
 
+  //首页
   {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
     name: 'Dashboard',
     hidden: true,
+    meta: {title: '首页'},
     children: [{
       path: 'dashboard',
       component: () => import('@/views/dashboard/index')
     }]
+  },
+
+  {
+    path: '/userMana',
+    component: Layout,
+    redirect: '/userMana',
+    name: 'userMana',
+    meta: {title: '用户管理', icon: 'user'},
+    children: [
+      {
+        path: 'list',
+        name: '用户列表',
+        component: () => import('@/views/user/index'),
+        meta: { title: '用户列表', icon: 'table' }
+      },
+      {
+        path: 'info',
+        name: '添加用户',
+        component: () => import('@/views/user/index'),
+        meta: { title: '添加用户', icon: 'form' }
+      }
+    ]
   },
 
   {
