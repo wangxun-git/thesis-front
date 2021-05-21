@@ -42,21 +42,63 @@ export const constantRouterMap = [
   {
     path: '/userMana',
     component: Layout,
-    redirect: '/userMana',
+    redirect: '/userMana/user',
     name: 'userMana',
     meta: {title: '用户管理', icon: 'user'},
     children: [
       {
-        path: 'list',
-        name: '用户列表',
-        component: () => import('@/views/user/index'),
-        meta: { title: '用户列表', icon: 'table' }
+        path: 'user',
+        name: 'user',
+        component: () => import('@/views/userMana/user/index'),
+        meta: {title: '管理者管理', icon: 'el-icon-user-solid'},
+        children: [
+          {
+            path: 'info',
+            name: '用户列表',
+            component: () => import('@/views/userMana/user/info'),
+            meta: { title: '用户列表', icon: 'table' }
+          },
+          {
+            path: 'save',
+            name: '添加用户',
+            component: () => import('@/views/userMana/user/save/index'),
+            meta: { title: '添加用户', icon: 'form' }
+          },
+          {
+            path: 'edit/:id',
+            name: '用户修改',
+            component: () => import('@/views/userMana/user/update/index'),
+            meta: {title: '用户修改', icon: 'form'},
+            hidden: true
+          }
+        ]
       },
       {
-        path: 'info',
-        name: '添加用户',
-        component: () => import('@/views/user/index'),
-        meta: { title: '添加用户', icon: 'form' }
+        path: 'student',
+        name: 'student',
+        component: () => import('@/views/userMana/student/index'),
+        meta: {title: '学生管理', icon: 'el-icon-user-solid'},
+        children: [
+          {
+            path: 'info',
+            name: '用户列表',
+            component: () => import('@/views/userMana/student/info'),
+            meta: { title: '用户列表', icon: 'table' }
+          },
+          {
+            path: 'save',
+            name: '添加用户',
+            component: () => import('@/views/userMana/student/save'),
+            meta: { title: '添加用户', icon: 'form' }
+          },
+          {
+            path: 'edit/:id',
+            name: '用户修改',
+            component: () => import('@/views/userMana/user/update/index'),
+            meta: {title: '用户修改', icon: 'form'},
+            hidden: true
+          }
+        ]
       }
     ]
   },

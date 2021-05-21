@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-
+    <router-view></router-view>
     <!-- 查询条件 -->
     <el-form :inline="true" class="demo-from-inline">
       <el-form-item>
@@ -29,7 +29,7 @@
 
     <el-table-column prop="T_USERNAME" label="用户名称" />
 
-    <el-table-column prop="T_MOBILE" label="用户手机号码" />
+    <el-table-column prop="T_MOBILE" label="手机号码" />
 
     <el-table-column prop="T_EMAIL" label="用户邮箱" />
 
@@ -38,7 +38,7 @@
     <el-table-column label="操作" align="center">
       <template slot-scope="scope">
 
-        <el-button type="infor" size="mini"  icon="el-icon-edit"  circle>修改</el-button>
+        <el-button type="infor" size="mini"  icon="el-icon-edit" @click="editUserById(scope.row.T_USER_ID)" circle>修改</el-button>
 
         <el-button type="danger" size="mini" icon="el-icon-delete" @click="removeUserInfoById(scope.row.T_USER_ID)" circle>删除</el-button>
       </template>
@@ -91,6 +91,7 @@
         })
       },
 
+      //条件查询用户信息
       getUserListByCond(page = 1) {
         this.page = page
         user.getUserInfoListByCond(page, this.user)
@@ -117,6 +118,11 @@
             this.getUserList();
           })
         })
+      },
+
+      //修改：路由到修改界面
+      editUserById(userId) {
+        this.$router.push({path: '/userMana/user/edit/' + userId})
       },
 
       //清空

@@ -25,6 +25,32 @@ export default {
       method: 'post',
       data: user
     })
+  },
+
+  //主键获取用户信息
+  getUserInfoById(userId) {
+    return request({
+      url: '/user/getOneUser/' + userId,
+      method: 'get'
+    })
+  },
+
+  //修改用户信息
+  updateUserInfo(user) {
+    return request({
+      url: '/user/updateOne',
+      method: 'put',
+      data: user
+    })
+  },
+
+  //保存用户
+  saveUser(user) {
+    return request({
+      url: '/user/saveOne',
+      method: 'post',
+      data: user
+    })
   }
 
 }
