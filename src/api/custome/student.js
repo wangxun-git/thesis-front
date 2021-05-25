@@ -40,13 +40,22 @@ export default {
   },
 
   //导出学生信息
-  exportStudentBySelect(stuIdList) {
+  exportStudentExcel(stuIdList) {
     return request({
       url: '/student/exportSelectStu',
       method: 'post',
-      data: {
-        "stuIdList" : stuIdList
-      }
+      data: stuIdList,
+      // back: callback,
+      responseType: 'blob'
+    })
+  },
+
+  //修改学生信息
+  updateStudentInfo(student) {
+    return request({
+      url: '/student/updateStu',
+      method: 'put',
+      data: student
     })
   }
 }

@@ -81,59 +81,44 @@ export const constantRouterMap = [
         children: [
           {
             path: 'info',
-            name: '用户列表',
+            name: '学生列表',
             component: () => import('@/views/userMana/student/info'),
-            meta: { title: '用户列表', icon: 'table' }
+            meta: { title: '学生列表', icon: 'table' }
           },
           {
             path: 'save',
-            name: '添加用户',
+            name: '添加学生',
             component: () => import('@/views/userMana/student/save'),
-            meta: { title: '添加用户', icon: 'form' }
+            meta: { title: '添加学生', icon: 'form' }
           },
           {
             path: 'edit/:id',
-            name: '用户修改',
-            component: () => import('@/views/userMana/user/update/index'),
-            meta: {title: '用户修改', icon: 'form'},
+            name: '学生修改',
+            component: () => import('@/views/userMana/student/update'),
+            meta: {title: '学生修改', icon: 'form'},
             hidden: true
+          },
+          {
+            path: '申请审批',
+            name: '申请审批',
+            component: () => import('@/views/userMana/student/approval'),
+            meta: {title: '申请审批', icon: 'form'},
+            children: [
+              {
+                path: '双学位申请审批',
+                name: '双学位申请审批',
+                component: () => import('@/views/userMana/student/approval/doubleDegree'),
+                meta: {title: '双学位申请审批', icon: 'form'},
+              },
+              {
+                path: '重新提交申请审批',
+                name: '重新提交申请审批',
+                component: () => import('@/views/userMana/student/approval/reSubmit'),
+                meta: {title: '重新提交申请审批', icon: 'form'},
+              }
+            ]
           }
         ]
-      }
-    ]
-  },
-
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
       }
     ]
   },
@@ -192,6 +177,41 @@ export const constantRouterMap = [
         path: 'menu2',
         component: () => import('@/views/nested/menu2/index'),
         meta: { title: 'menu2' }
+      }
+    ]
+  },
+
+  {
+    path: '/example',
+    component: Layout,
+    redirect: '/example/table',
+    name: 'Example',
+    meta: { title: 'Example', icon: 'example' },
+    children: [
+      {
+        path: 'table',
+        name: 'Table',
+        component: () => import('@/views/table/index'),
+        meta: { title: 'Table', icon: 'table' }
+      },
+      {
+        path: 'tree',
+        name: 'Tree',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'Tree', icon: 'tree' }
+      }
+    ]
+  },
+
+  {
+    path: '/form',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Form',
+        component: () => import('@/views/form/index'),
+        meta: { title: 'Form', icon: 'form' }
       }
     ]
   },

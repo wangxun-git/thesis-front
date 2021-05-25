@@ -33,11 +33,26 @@
           </el-option>
         </el-select>
       </el-form-item>
-
-      <el-button type="primary" icon="el-icon-search" @click="getStudentListByCond()">查询</el-button>
-      <el-button type="warning" @click="resetData()">清空</el-button>
-      <el-button @click="exportStudent()"><svg-icon icon-class="export"/>导出</el-button>
-
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" @click="getStudentListByCond()">查询</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="warning" @click="resetData()">清空</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="exportStudent()"><svg-icon icon-class="export"/>导出</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-upload
+          :headers="headers"
+          :before-remove="beforeRemove"
+          :limit="1"
+          :on-success="uploadSuccess"
+          :action="BASE_API+'/student/importStu'">
+          <el-button icon="el-icon-upload">导入</el-button>
+        </el-upload>
+      </el-form-item>
+<!--      <el-button type="primary" @click="exportStudent()"><i class="el-icon-upload el-icon&#45;&#45;right"></i>导入</el-button>-->
     </el-form>
 
     <el-table
@@ -49,7 +64,7 @@
 
       <el-table-column type="selection" width="55"/>
 
-      <el-table-column prop="T_STU_ID" label="学生学号"></el-table-column>
+      <el-table-column prop="T_STU_ID" label="学生学号" width="120"></el-table-column>
 
       <el-table-column prop="T_STU_NAME" label="学生姓名"></el-table-column>
 
@@ -61,12 +76,12 @@
 
       <el-table-column prop="T_MAJOR_NAME" label="归属专业"></el-table-column>
 
-      <el-table-column prop="T_STU_TYPE_ZH_NAME" label="培养层级"></el-table-column>
+      <el-table-column prop="T_STU_TYPE_ZH_NAME" label="培养层级" width="80"></el-table-column>
 
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
 
-          <el-button type="infor" size="mini"  icon="el-icon-edit" circle>修改</el-button>
+          <el-button type="infor" size="mini"  icon="el-icon-edit" circle @click="editStudentById(scope.row.T_STU_ID)">修改</el-button>
 
           <el-button type="danger" size="mini" icon="el-icon-delete" circle @click="removeStudentInfo(scope.row.T_STU_ID)">删除</el-button>
         </template>
@@ -91,6 +106,7 @@
   import studentApi from '@/api/custome/student.js'
   import collegeApi from '@/api/collmajor/college.js'
   import majorApi from '@/api/collmajor/major.js'
+  import { getToken } from '@/utils/auth'
 
   export default {
     name: "index",
@@ -107,7 +123,9 @@
           majorId: '',
           major: {},
           selectStudentList: {},
-          stuIdList: []
+          stuIdList: [],
+          headers: {token: getToken()},
+          BASE_API: process.env.BASE_API
         }
     },
 
@@ -190,19 +208,57 @@
 
       //导出学生信息
       exportStudent() {
+        this.stuIdList = []
         for (let i = 0; i < this.selectStudentList.length; i++) {
           let stuId = this.selectStudentList[i].T_STU_ID
           this.stuIdList.push(stuId)
         }
-        console.log(this.stuIdList)
-
-        studentApi.exportStudentBySelect(this.stuIdList)
+        studentApi.exportStudentExcel(this.stuIdList)  //文件导出
         .then(result => {
-          this.$message({
-            type: 'success',
-            "message": '导出成功'
-          })
+          if (!result) {
+            return
+          }
+          const link = document.createElement('a')
+          let blob = new Blob([result], {type: 'application/vnd.ms-excel'})
+          link.style.display = 'none';
+          link.href = URL.createObjectURL(blob);
+
+          link.setAttribute('download', '学生信息' + '.xlsx')
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+        }).catch(error => {
+          console.error(error)
         })
+      },
+
+      beforeRemove(file, fileList){
+        return this.$confirm(`确定移除 ${ file.name }？`,'提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        });
+      },
+
+      uploadSuccess(response) {
+        const code = response.RETURN_CODE
+        if (code !== 10000) {
+          this.$message({
+            type: "error",
+            message: response.RETURN_MSG,
+            duration: 5 * 1000
+          })
+        }else {
+          this.$message({
+            type: "success",
+            message: "添加成功"
+          })
+        }
+      },
+
+      //修改：跳转
+      editStudentById(stuId) {
+        this.$router.push({path: '/userMana/student/edit/' + stuId})
       }
 
     }
