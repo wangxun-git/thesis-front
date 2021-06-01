@@ -145,7 +145,6 @@
 
       //下拉框选择
       handlerUpdateRole() {
-        console.log('---------')
         this.user.T_ROLE_ID = this.roleId
       },
 

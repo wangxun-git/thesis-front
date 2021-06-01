@@ -30,7 +30,7 @@ export const constantRouterMap = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
-    name: 'Dashboard',
+    name: '首页',
     hidden: true,
     meta: {title: '首页'},
     children: [{
@@ -50,7 +50,7 @@ export const constantRouterMap = [
         path: 'user',
         name: 'user',
         component: () => import('@/views/userMana/user/index'),
-        meta: {title: '管理者管理', icon: 'el-icon-user-solid'},
+        meta: {title: '管理者管理', icon: 'user'},
         children: [
           {
             path: 'info',
@@ -77,7 +77,7 @@ export const constantRouterMap = [
         path: 'student',
         name: 'student',
         component: () => import('@/views/userMana/student/index'),
-        meta: {title: '学生管理', icon: 'el-icon-user-solid'},
+        meta: {title: '学生管理', icon: 'student'},
         children: [
           {
             path: 'info',
@@ -99,19 +99,19 @@ export const constantRouterMap = [
             hidden: true
           },
           {
-            path: '申请审批',
+            path: 'approved',
             name: '申请审批',
             component: () => import('@/views/userMana/student/approval'),
             meta: {title: '申请审批', icon: 'form'},
             children: [
               {
-                path: '双学位申请审批',
+                path: 'applyDoubleDeg',
                 name: '双学位申请审批',
                 component: () => import('@/views/userMana/student/approval/doubleDegree'),
                 meta: {title: '双学位申请审批', icon: 'form'},
               },
               {
-                path: '重新提交申请审批',
+                path: 'applyResub',
                 name: '重新提交申请审批',
                 component: () => import('@/views/userMana/student/approval/reSubmit'),
                 meta: {title: '重新提交申请审批', icon: 'form'},
@@ -119,6 +119,107 @@ export const constantRouterMap = [
             ]
           }
         ]
+      }
+    ]
+  },
+
+  {
+    path: '/collegeTutor',
+    component: Layout,
+    redirect: '/collegeTutor/college',
+    name: '院系导师管理',
+    meta: {title: '院系导师管理', icon: 'college'},
+    children: [
+      {
+        path: 'college',
+        component: () => import('@/views/collegeTutor/college/index'),
+        name: '院系管理',
+        meta: {title: '院系管理', icon: 'college2'},
+        children: [
+          {
+            path: 'info',
+            component: () => import('@/views/collegeTutor/college/info'),
+            name: '院系列表',
+            meta: {title: '院系列表', icon: 'table'}
+          },
+          {
+            path: 'save',
+            component: () => import('@/views/collegeTutor/college/save'),
+            name: '院系添加',
+            meta: {title: '院系添加', icon: 'form'}
+          }
+        ]
+      },
+
+      {
+        path: 'major',
+        component: () => import('@/views/collegeTutor/major/index'),
+        name: '专业管理',
+        meta: {title: '专业管理', icon: 'major'},
+        children: [
+          {
+            path: 'info',
+            component: () => import('@/views/collegeTutor/major/info'),
+            name: '专业列表',
+            meta: {title: '专业列表', icon: 'table'}
+          },
+          {
+            path: 'save',
+            component: () => import('@/views/collegeTutor/major/save'),
+            name: '专业添加',
+            meta: {title: '专业添加', icon: 'form'}
+          }
+        ]
+      },
+
+      {
+        path: 'tutor',
+        component: () => import('@/views/collegeTutor/major/index'),
+        name: '导师管理',
+        meta: {title: '导师管理', icon: 'tutor'},
+        children: [
+          {
+            path: 'info',
+            component: () => import('@/views/collegeTutor/tutor/info'),
+            name: '导师列表',
+            meta: {title: '导师列表', icon: 'table'}
+          },
+          {
+            path: 'save',
+            component: () => import('@/views/collegeTutor/tutor/save'),
+            name: '导师添加',
+            meta: {title: '导师添加', icon: 'form'}
+          },
+          {
+            path: 'edit/:id',
+            component: () => import('@/views/collegeTutor/tutor/save'),
+            name: '导师修改',
+            meta: {title: '导师修改', icon: 'form'},
+            hidden : true
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    path: '/thesis',
+    component: Layout,
+    redirect: '/thesis',
+    name: '论文管理',
+    meta: {title: '论文管理', icon: 'thesis'},
+    children: [
+      {
+        path: 'info',
+        component: () => import('@/views/thesis/info'),
+        name: '论文列表',
+        meta: {title: '论文列表', icon: 'table'}
+      },
+      {
+        path: 'approved',
+        component: () => import('@/views/thesis/info'),
+        name: '论文审核',
+        meta: {title: '论文审核', icon: 'thesis-approved'}
       }
     ]
   },

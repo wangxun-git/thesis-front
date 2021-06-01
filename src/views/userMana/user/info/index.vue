@@ -37,7 +37,6 @@
 
     <el-table-column label="操作" align="center">
       <template slot-scope="scope">
-
         <el-button type="infor" size="mini"  icon="el-icon-edit" @click="editUserById(scope.row.T_USER_ID)" circle>修改</el-button>
 
         <el-button type="danger" size="mini" icon="el-icon-delete" @click="removeUserInfoById(scope.row.T_USER_ID)" circle>删除</el-button>

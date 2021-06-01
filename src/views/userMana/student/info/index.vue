@@ -33,15 +33,19 @@
           </el-option>
         </el-select>
       </el-form-item>
+
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="getStudentListByCond()">查询</el-button>
       </el-form-item>
+
       <el-form-item>
         <el-button type="warning" @click="resetData()">清空</el-button>
       </el-form-item>
+
       <el-form-item>
         <el-button @click="exportStudent()"><svg-icon icon-class="export"/>导出</el-button>
       </el-form-item>
+
       <el-form-item>
         <el-upload
           :headers="headers"
@@ -104,7 +108,7 @@
 
 <script>
   import studentApi from '@/api/custome/student.js'
-  import collegeApi from '@/api/collmajor/college.js'
+  import collegeApi from '@/api/collegeTutor/college.js'
   import majorApi from '@/api/collmajor/major.js'
   import { getToken } from '@/utils/auth'
 
@@ -131,7 +135,7 @@
 
     created() {
       this.getStudentInfo()
-      this.getCollegeInfo()
+      this.getCollegeInfos()
     },
 
     methods: {
@@ -165,8 +169,8 @@
       },
 
       //初始化学院信息
-      getCollegeInfo(){
-        collegeApi.getCollegeInfo()
+      getCollegeInfos(){
+        collegeApi.getAllCollegeInfo()
         .then(result => {
           this.collegelist = result.OUT_DATA.data
         })

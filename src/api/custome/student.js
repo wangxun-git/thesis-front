@@ -45,7 +45,6 @@ export default {
       url: '/student/exportSelectStu',
       method: 'post',
       data: stuIdList,
-      // back: callback,
       responseType: 'blob'
     })
   },
