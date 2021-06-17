@@ -103,11 +103,12 @@
           })
         },
 
-        getStuTypeInfo() {
+        getStuTypeInfo(page = 1) {
           this.stutype.T_IS_TUTOR_LEVEL = 1
-          stuTypeApi.getStuType(this.stutype)
+          this.page = page
+          stuTypeApi.getStuType(this.page, this.stutype)
             .then(result => {
-              this.stutypeList = result.OUT_DATA.data
+              this.stutypeList = result.OUT_DATA.data.data
             })
         },
 

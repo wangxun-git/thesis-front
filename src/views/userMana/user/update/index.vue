@@ -55,7 +55,7 @@
 <script>
   import user from '@/api/custome/user.js'
   import {getRoles} from '@/api/role/role.js'
-  import {deletefile} from "@/api/system/sys";
+  import sys from "@/api/system/sys";
   import { getToken } from '@/utils/auth'
   import ImageCropper from '@/components/ImageCropper'
   import PanThumb from '@/components/PanThumb'
@@ -125,7 +125,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          deletefile(this.user.T_PHOTO)  //删除文件
+          sys.deletefile(this.user.T_PHOTO)  //删除文件
           .then( result => {
             //删除用户头像存储信息
             this.user.T_PHOTO = this.photo

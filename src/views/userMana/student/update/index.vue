@@ -60,7 +60,7 @@
 
 <script>
   import studentApi from '@/api/custome/student.js'
-  import collegeApi from '@/api/collmajor/college.js'
+  import collegeApi from '@/api/collegeTutor/college.js'
   import majorApi from '@/api/collmajor/major.js'
 
     export default {
@@ -113,7 +113,7 @@
 
         //初始化学院信息
         getCollegeInfo() {
-          collegeApi.getCollegeInfo()
+          collegeApi.getAllCollegeInfo()
             .then(result => {
               this.collegelist = result.OUT_DATA.data
             })

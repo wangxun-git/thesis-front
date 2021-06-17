@@ -53,6 +53,17 @@
 <!--          />-->
       </el-form-item>
 
+      <el-form-item label="用户身份">
+        <el-select v-model="user.T_USER_IDENTITY" clearable placeholder="请选择身份信息">
+          <el-option
+            v-for="item in idenList"
+            :key="item.key"
+            :label="item.value"
+            :value="item.key">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
       <el-form-item label="用户权限">
         <el-select v-model="roleId" clearable placeholder="请选择权限信息" :onchange="handlerSelectChange()">
           <el-option
@@ -95,14 +106,29 @@
           T_PHOTO: '',
           T_ROLE: {
             T_ROLE_ID: ''
-          }
+          },
+          T_USER_IDENTITY: ''
         },
         rolelist: {},
         pwdType: 'password',
         BASE_API: process.env.BASE_API, // 接口API地址
         headers: {token: getToken()},
         avatar: '',
-        roleId: ''
+        roleId: '',
+        idenList: [
+          {
+            key: 0,
+            value: '管理员'
+          },
+          {
+            key: 1,
+            value: '导师'
+          },
+          {
+            key: 2,
+            value: '学生'
+          }
+        ]
       }
     },
 

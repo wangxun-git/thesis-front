@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import Router, {RouteConfig} from 'vue-router'
 
 // in development-env not use lazy-loading, because lazy-loading too many pages will cause webpack hot update too slow. so only in production use lazy-loading;
 // detail: https://panjiachen.github.io/vue-element-admin-site/#/lazy-loading
@@ -70,6 +70,12 @@ export const constantRouterMap = [
             component: () => import('@/views/userMana/user/update/index'),
             meta: {title: '用户修改', icon: 'form'},
             hidden: true
+          },
+          {
+            path: 'stuType',
+            name: '类型职称管理',
+            component: () => import('@/views/userMana/user/stuType'),
+            meta: {title: '类型职称管理', icon: 'table'}
           }
         ]
       },
@@ -117,6 +123,20 @@ export const constantRouterMap = [
                 meta: {title: '重新提交申请审批', icon: 'form'},
               }
             ]
+          },
+          {
+            path: 'stuDegree',
+            name: '学位级别管理',
+            component: () => import('@/views/userMana/student/stuDegree'),
+            meta: {title: '学位级别管理', icon: 'table'},
+            children: [
+              {
+                path: 'info',
+                name: '学位级别列表',
+                component: () => import('@/views/userMana/student/stuDegree/info'),
+                meta: {title: '学位级别列表', icon: 'table'}
+              }
+            ]
           }
         ]
       }
@@ -128,19 +148,19 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/collegeTutor/college',
     name: '院系导师管理',
-    meta: {title: '院系导师管理', icon: 'college'},
+    meta: {title: '院系导师管理', icon: 'college', roles: ['student'], alwaysShow: true},
     children: [
       {
         path: 'college',
         component: () => import('@/views/collegeTutor/college/index'),
         name: '院系管理',
-        meta: {title: '院系管理', icon: 'college2'},
+        meta: {title: '院系管理', icon: 'college2', roles: ['student']},
         children: [
           {
             path: 'info',
             component: () => import('@/views/collegeTutor/college/info'),
             name: '院系列表',
-            meta: {title: '院系列表', icon: 'table'}
+            meta: {title: '院系列表', icon: 'table', noCache: true}
           },
           {
             path: 'save',
@@ -211,108 +231,111 @@ export const constantRouterMap = [
     children: [
       {
         path: 'info',
-        component: () => import('@/views/thesis/info'),
+        component: () => import('@/views/thesis/info/index'),
         name: '论文列表',
-        meta: {title: '论文列表', icon: 'table'}
-      },
-      {
-        path: 'approved',
-        component: () => import('@/views/thesis/info'),
-        name: '论文审核',
-        meta: {title: '论文审核', icon: 'thesis-approved'}
-      }
-    ]
-  },
-
-  {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
+        meta: {title: '论文列表', icon: 'table'},
         children: [
           {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
+            path: 'approved',
+            component: () => import('@/views/thesis/info/approved'),
+            name: '审核列表',
+            meta: {title: '审核列表', icon: 'table'}
           },
           {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
+            path: 'catalogue',
+            component: () => import('@/views/thesis/info/catalogue'),
+            name: '编目列表',
+            meta: {title: '编目列表', icon: 'table'}
           },
           {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
+            path: 'edit/:id',
+            name: '论文修改',
+            component: () => import('@/views/thesis/info/update'),
+            meta: {title: '论文修改', icon: 'form'},
+            hidden: true
           }
         ]
       },
       {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        meta: { title: 'menu2' }
-      }
-    ]
-  },
-
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        path: 'submit',
+        component: () => import('@/views/thesis/upload/index'),
+        name: '论文提交',
+        meta: {title: '论文提交', icon: 'thesis-submit'}
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'approved',
+        component: () => import('@/views/thesis/approved/index'),
+        name: '论文审核',
+        meta: {title: '论文审核', icon: 'thesis-approved'},
+        hidden: true
+      },
+      {
+        path: 'catalogue',
+        component: () => import('@/views/thesis/catalogue/index'),
+        name: '论文编目',
+        meta: {title: '论文编目', icon: 'catalogue'},
+        hidden: true
       }
     ]
   },
 
   {
-    path: '/form',
+    path: '/statMana',
     component: Layout,
+    redirect: '/statMana/loginSata',
+    name: '统计管理',
+    meta: {title: '统计管理', icon: 'stat'},
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        path: 'loginSata',
+        component: () => import('@/views/statMana/loginSata'),
+        name: '登录统计',
+        meta: {title: '登录统计', icon: 'loginStat'},
+        nocache: true
+      },
+      {
+        path: 'thesisSata',
+        component: () => import('@/views/statMana/index'),
+        name: '论文统计',
+        meta: {title: '论文统计', icon: 'thesisSata'},
+        children: [
+          {
+            path: 'thesisSata',
+            component: () => import('@/views/statMana/thesisSata'),
+            name: '年份论文统计',
+            meta: {title: '年份论文统计', icon: 'thesisSata'}
+          },
+          {
+            path: 'thesisCollSata',
+            component: () => import('@/views/statMana/thesisCollSata'),
+            name: '学院论文统计',
+            meta: {title: '学院论文统计', icon: 'viewSata'}
+          }
+        ]
+      },
+    ]
+  },
+
+  {
+    path: '/systemMana',
+    component: Layout,
+    redirect: '/sysMana/emailSys',
+    name: '系统管理',
+    meta: {title: '系统管理', icon: 'stat'},
+    children: [
+      {
+        path: 'emailSys',
+        component: () => import('@/views/sysMana/emailSys'),
+        name: '邮箱管理',
+        meta: {title: '邮箱管理', icon: 'emailSys'},
+        nocache: true
+      },
+      {
+        path: 'noticeSys',
+        component: () => import('@/views/sysMana/noticeSys'),
+        name: '通知管理',
+        meta: {title: '通知管理', icon: 'noticeSys'},
+        nocache: true
       }
     ]
   },

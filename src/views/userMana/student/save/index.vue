@@ -41,6 +41,16 @@
         </el-select>
       </el-form-item>
 
+      <el-form-item label="入学年份">
+        <el-date-picker v-model="student.T_EN_YEAR" type="year" placeholder="入学年份" value-format="yyyy">
+        </el-date-picker>
+      </el-form-item>
+
+      <el-form-item label="毕业年份">
+        <el-date-picker v-model="student.T_GRA_YEAR" type="year" placeholder="毕业年份" value-format="yyyy">
+        </el-date-picker>
+      </el-form-item>
+
       <el-form-item label="培养层级">
         <el-radio-group v-model="level">
           <el-radio :label="item.T_STU_TYPE_ID" :key="item.T_STU_TYPE_ID" v-for="item in levellist" @change="handlerLevelChange()">
@@ -65,7 +75,7 @@
 <script>
 
   import studentApi from '@/api/custome/student.js'
-  import collegeApi from '@/api/collmajor/college.js'
+  import collegeApi from '@/api/collegeTutor/college.js'
   import majorApi from '@/api/collmajor/major.js'
 
     export default {
@@ -94,7 +104,7 @@
       methods: {
         //初始化学院信息
         getCollegeInfo() {
-          collegeApi.getCollegeInfo()
+          collegeApi.getAllCollegeInfo()
             .then(result => {
               this.collegelist = result.OUT_DATA.data
             })

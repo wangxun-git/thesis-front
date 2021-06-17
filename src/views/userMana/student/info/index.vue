@@ -156,7 +156,6 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          console.log(stuId)
           studentApi.removeStudentInfoById(stuId)
           .then(result => {
             this.$message({
