@@ -85,6 +85,16 @@ export default {
       method: 'post',
       data: thesisColl
     })
+  },
+
+  //删除论文文件
+  removeThesisFile(fileUrl){
+    return request({
+      url: '/thesis/deleteThesis',
+      method: 'get',
+      params: {fileUrl}
+    })
   }
 
 }
+

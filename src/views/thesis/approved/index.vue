@@ -3,20 +3,21 @@
   <div class="app-container">
     <router-view/>
     <!-- 步骤条 -->
-    <el-steps :active="2">
+    <el-steps :active="active">
       <el-step title="论文提交" icon="el-icon-upload"></el-step>
-      <el-step title="论文审核" icon="el-icon-edit-outline"></el-step>
-      <el-step title="论文归档" icon="el-icon-circle-check"></el-step>
+      <el-step title="导师审核" icon="el-icon-edit-outline"></el-step>
+      <el-step title="研究院审核" icon="el-icon-edit-outline"></el-step>
+      <el-step title="论文编目" icon="el-icon-circle-check"></el-step>
     </el-steps>
 
     <div v-show="showThesisInfo">
         <el-form>
 
-          <el-form-item label="学号">
+          <el-form-item label="学号" :label-width="formWidth">
             <el-input v-model="thesis.T_STU_ID" class="input-width" :disabled="editThesis"/>
           </el-form-item>
 
-          <el-form-item label="学院名称">
+          <el-form-item label="学院名称" :label-width="formWidth">
             <el-select v-model="thesis.T_COLLEGE_ID" clearable placeholder="请选择学院信息" @change="handlerCollegeChange()" :disabled="editThesis">
               <el-option
                 v-for="item in collegeList"
@@ -27,7 +28,7 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="专业名称">
+          <el-form-item label="专业名称" :label-width="formWidth">
             <el-select v-model="thesis.T_MAJOR_ID" clearable placeholder="请选择专业信息" :disabled="editThesis">
               <el-option
                 v-for="item in majorList"
@@ -38,13 +39,13 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="论文答辩日期">
+          <el-form-item label="答辩日期" :label-width="formWidth">
             <el-col :span="11">
               <el-date-picker type="date" placeholder="选择日期" v-model="thesis.T_THESIS_DEFENCE_TIME" :disabled="editThesis"></el-date-picker>
             </el-col>
           </el-form-item>
 
-          <el-form-item label="学位年度">
+          <el-form-item label="学位年度" :label-width="formWidth">
             <el-date-picker
               v-model="thesis.T_THESIS_FIN_TIME"
               type="year"
@@ -53,31 +54,46 @@
             </el-date-picker>
           </el-form-item>
 
-          <el-form-item label="导师">
+          <el-form-item label="导师" :label-width="formWidth">
             <el-input v-model="thesis.T_TUTOR_NAME" class="input-width" placeholder="请使用;号分隔" :disabled="editThesis"></el-input>
           </el-form-item>
 
-          <el-form-item label="研究方向">
+          <el-form-item label="学科" :label-width="formWidth">
+            <el-cascader
+              v-model="subjectCode"
+              :options="options"
+              @change="handleChange"
+              @active-item-change="handleExpandChange"
+              clearable
+              :placeholder="subjectName"
+              :disabled="editThesis"/>
+          </el-form-item>
+
+          <el-form-item label="研究方向" :label-width="formWidth">
             <el-input v-model="thesis.T_RESEARCH_DIRE" class="input-width" placeholder="上传论文后可自动回显" :disabled="editThesis"></el-input>
           </el-form-item>
 
-          <el-form-item label="论文题目">
+          <el-form-item label="论文题目" :label-width="formWidth">
             <el-input v-model="thesis.T_THESIS_ZH_TITLE" class="input-width" placeholder="上传论文后可自动回显" :disabled="editThesis"></el-input>
           </el-form-item>
 
-          <el-form-item label="英文题目">
+          <el-form-item label="英文题目" :label-width="formWidth">
             <el-input v-model="thesis.T_THESIS_EN_TITLE" class="input-width" :disabled="editThesis"></el-input>
           </el-form-item>
 
-          <el-form-item label="关键词">
+          <el-form-item label="关键词" :label-width="formWidth">
             <el-input v-model="thesis.T_THESIS_ZH_KEY" class="input-width" placeholder="上传论文后可自动回显" :disabled="editThesis"/>
           </el-form-item>
 
-          <el-form-item label="英文关键词">
+          <el-form-item label="英文关键词" :label-width="formWidth">
             <el-input v-model="thesis.T_THESIS_EN_KEY" class="input-width" placeholder="上传论文后可自动回显" :disabled="editThesis"/>
           </el-form-item>
 
-          <el-form-item label="摘要(上传论文后可自动回显)"/>
+          <el-form-item label="论文总页数" :label-width="formWidth">
+            <el-input v-model="thesis.T_THESIS_PAGE_NUMBER" :disabled="editThesis"></el-input>
+          </el-form-item>
+
+          <el-form-item label="摘要"/>
           <el-form-item label="摘要">
             <tinymce :height="200" v-model="thesis.T_THESIS_ZH_ABSTRACT" :disabled="editThesis"></tinymce>
           </el-form-item>
@@ -89,13 +105,9 @@
           <!--            </el-radio>-->
           <!--          </el-radio-group>-->
           <!--        </el-form-item>-->
-          <el-form-item label="英文摘要(上传论文后可自动回显)"/>
+          <el-form-item label="英文摘要"/>
           <el-form-item label="英文摘要">
             <tinymce :height="200" v-model="thesis.T_THESIS_EN_ABSTRACT" :disabled="editThesis"></tinymce>
-          </el-form-item>
-
-          <el-form-item label="论文总页数">
-            <el-input v-model="thesis.T_THESIS_PAGE_NUMBER" :disabled="editThesis"></el-input>
           </el-form-item>
 
           <el-form-item v-show="showButton">
@@ -130,6 +142,7 @@
   import collegeApi from '@/api/collegeTutor/college.js'
   import majorApi from '@/api/collmajor/major.js'
   import { getToken } from '@/utils/auth'
+  import subjectApi from '@/api/subject/subject'
 
     export default {
       components: { Tinymce },
@@ -142,6 +155,7 @@
 
       data() {
           return {
+            active: 2,
             showThesisInfo: false,
             editInput: false,
             thesis: {
@@ -150,6 +164,7 @@
               T_COLLEGE_ID: '',
               T_TUTOR_NAME: '',
               T_MAJOR_ID: '',
+              T_SUBJECT_CODE: '',
               T_RESEARCH_DIRE: '',
               T_THESIS_ZH_TITLE: '',
               T_THESIS_EN_TITLE: '',
@@ -174,13 +189,25 @@
             BASE_API: process.env.BASE_API,
             updateThesis: {
               T_STU_ID: ''
-            }
+            },
+            formWidth: '90px',
+            level: 0,  //学科等级
+            options: [],  //学科信息
+            subject: {},
+            subjectCode: '',
+            subjectName: 'asd'
           }
       },
 
       created() {
         //获取学院信息
         this.getCollegeInfo()
+
+      },
+
+      mounted() {
+        //初始化获取学科信息
+        this.getSubjectInfo()
         //获取登录用户的论文信息
         this.getThesisInfoByStuId()
         //判断登录用户是否提交论文，论文所处状态
@@ -188,6 +215,19 @@
       },
 
       methods: {
+
+        getSubjectInfo() {
+          subjectApi.getSubjectByLevel(this.level)
+            .then(result => {
+              const data = result.OUT_DATA.data
+              let pList = []
+              for (var i = 0; i < data.length; i++) {
+                let List = []
+                pList.push({ value: data[i].T_SUBJECT_CODE, label: data[i].T_SUBJECT_NAME, children: List })
+              }
+              this.options = pList
+            })
+        },
 
         //删除上传的论文
         beforeRemove(file, fileList){
@@ -220,12 +260,19 @@
           thesisApi.getThesisStatus()
             .then(result => {
               const data = result.OUT_DATA.data
-              if (2 === data) {  //审核不通过，给予修改权限
+              if (2 === data || 7 == data) {  //审核不通过，给予修改权限
                 //跳转页面
                 this.editThesis = false
                 this.showButton = true
+                if (7 == data) {
+                  this.active = 3
+                }
+              }else if (0 == data || 1 == data){
+                this.active = 2
+              }else if (3 == data || 4 == data) {
+                this.$router.push({path: '/thesis/catalogue'})
               }else {
-
+                this.active = 3
               }
             })
         },
@@ -255,27 +302,34 @@
             const data = result.OUT_DATA.data.data
             this.thesis = data[0]
             this.handlerCollegeChange()
+            this.subjectName = data[0].T_SUBJECT_NAME
             this.thesis.T_MAJOR_ID = data[0].T_MAJOR_ID
             //查询审核原因
-            if (2 == this.thesis.T_THESIS_STATUS || 1 == this.thesis.T_THESIS_STATUS) {
+            if (2 == this.thesis.T_THESIS_STATUS || 7 == this.thesis.T_THESIS_STATUS) {
               thesisApi.getNotPassThesisAppr(this.thesis.T_THESIS_ID)
                 .then(result1 => {
+                  console.log('++++++')
+
                   const data = result1.OUT_DATA.data
                   //弹出通知框
-                  if (2 == this.thesis.T_THESIS_STATUS) {
-                    this.$notify({
-                      title: '审核通知',
-                      message: '您的论文未通过审核；原因：' + data.T_THESIS_APPR_REASON ,
-                      type: 'warning'
-                    });
-                  }else {
-                    this.$notify({
-                      title: '审核通知',
-                      message: '恭喜您的论文通过审核' ,
-                      type: 'success'
-                    });
-                  }
+                  this.$notify({
+                    title: '审核通知',
+                    message: '您的论文未通过审核；原因：' + data.T_THESIS_APPR_REASON ,
+                    type: 'warning'
+                  });
                 })
+            }else if (0 == this.thesis.T_THESIS_STATUS || 5 == this.thesis.T_THESIS_STATUS) {
+              this.$notify({
+                title: '审核通知',
+                message: '您的论文正在审核中......',
+                type: 'info'
+              });
+            } else {
+              this.$notify({
+                title: '审核通知',
+                message: '恭喜您的论文通过审核' ,
+                type: 'success'
+              });
             }
           })
         },
@@ -308,9 +362,54 @@
                 this.showButton = true
               })
           })
-        }
-      }
+        },
 
+        //处理学科代码
+        handleChange(value) {
+          let code = value[2]
+          this.thesis.T_SUBJECT_CODE = code
+        },
+
+        handleExpandChange(value) {
+          if (value.length > 2) {
+            return
+          }
+          this.subject = {}
+          this.subject.T_SUBJECT_CODE = value[value.length - 1]
+          subjectApi.getSubjectByCond(this.subject)
+            .then(result => {
+              const data = result.OUT_DATA.data
+              let level = data.T_SUBJECT_LEVEL
+              let pList = []
+              for (var i = 0; i < data.T_CHILDREN_SUBJECT_LIST.length; i++) {
+                if (0 == level) {
+                  let List = []
+                  pList.push({ value: data.T_CHILDREN_SUBJECT_LIST[i].T_SUBJECT_CODE, label: data.T_CHILDREN_SUBJECT_LIST[i].T_SUBJECT_NAME, children: List })
+                }
+                if (1 == level) {
+                  pList.push({ value: data.T_CHILDREN_SUBJECT_LIST[i].T_SUBJECT_CODE, label: data.T_CHILDREN_SUBJECT_LIST[i].T_SUBJECT_NAME })
+                }
+              }
+              //遍历第一级选择器
+              for (var i = 0; i < this.options.length; i++) {
+                if (0 == level) {
+                  if (this.subject.T_SUBJECT_CODE = this.options[i].value) {
+                    this.options[i].children = pList
+                  }
+                }
+                if (1 == level) {
+                  //遍历二级选择器
+                  for (var j = 0; j < this.options[i].children.length; j++) {
+                    if (this.subject.T_SUBJECT_CODE = this.options[i].children[j].value) {
+                      this.options[i].children[j].children = pList
+                    }
+                  }
+                }
+              }
+            })
+        }
+
+      }
     }
 </script>
 

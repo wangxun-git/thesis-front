@@ -123,20 +123,6 @@ export const constantRouterMap = [
                 meta: {title: '重新提交申请审批', icon: 'form'},
               }
             ]
-          },
-          {
-            path: 'stuDegree',
-            name: '学位级别管理',
-            component: () => import('@/views/userMana/student/stuDegree'),
-            meta: {title: '学位级别管理', icon: 'table'},
-            children: [
-              {
-                path: 'info',
-                name: '学位级别列表',
-                component: () => import('@/views/userMana/student/stuDegree/info'),
-                meta: {title: '学位级别列表', icon: 'table'}
-              }
-            ]
           }
         ]
       }
@@ -191,7 +177,6 @@ export const constantRouterMap = [
           }
         ]
       },
-
       {
         path: 'tutor',
         component: () => import('@/views/collegeTutor/major/index'),
@@ -223,6 +208,32 @@ export const constantRouterMap = [
   },
 
   {
+    path: '/subject',
+    component: Layout,
+    redirect: '/subject',
+    name: '学科学位管理',
+    meta: {title: '学科学位管理', icon: 'degree'},
+    children: [
+      {
+        path: 'info',
+        component: () => import('@/views/subject/info/index'),
+        name: '学科列表',
+        meta: {title: '学科列表', icon: 'table'},
+        alwaysShow: true,
+        nocache: true
+      },
+      {
+        path: 'stuDegree',
+        name: '学位级别列表',
+        component: () => import('@/views/subject/stuDegree/index'),
+        meta: {title: '学位级别列表', icon: 'table'},
+        alwaysShow: true,
+        nocache: true
+      }
+    ]
+  },
+
+  {
     path: '/thesis',
     component: Layout,
     redirect: '/thesis',
@@ -245,14 +256,16 @@ export const constantRouterMap = [
             path: 'catalogue',
             component: () => import('@/views/thesis/info/catalogue'),
             name: '编目列表',
-            meta: {title: '编目列表', icon: 'table'}
+            meta: {title: '编目列表', icon: 'table'},
+            nocache: true
           },
           {
             path: 'edit/:id',
             name: '论文修改',
             component: () => import('@/views/thesis/info/update'),
             meta: {title: '论文修改', icon: 'form'},
-            hidden: true
+            hidden: true,
+            nocache: true
           }
         ]
       },
@@ -260,21 +273,24 @@ export const constantRouterMap = [
         path: 'submit',
         component: () => import('@/views/thesis/upload/index'),
         name: '论文提交',
-        meta: {title: '论文提交', icon: 'thesis-submit'}
+        meta: {title: '论文提交', icon: 'thesis-submit'},
+        nocache: true
       },
       {
         path: 'approved',
         component: () => import('@/views/thesis/approved/index'),
         name: '论文审核',
         meta: {title: '论文审核', icon: 'thesis-approved'},
-        hidden: true
+        hidden: true,
+        nocache: true
       },
       {
         path: 'catalogue',
         component: () => import('@/views/thesis/catalogue/index'),
         name: '论文编目',
         meta: {title: '论文编目', icon: 'catalogue'},
-        hidden: true
+        hidden: true,
+        nocache: true
       }
     ]
   },
@@ -321,7 +337,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/sysMana/emailSys',
     name: '系统管理',
-    meta: {title: '系统管理', icon: 'stat'},
+    meta: {title: '系统管理', icon: 'system'},
     children: [
       {
         path: 'emailSys',
@@ -336,17 +352,6 @@ export const constantRouterMap = [
         name: '通知管理',
         meta: {title: '通知管理', icon: 'noticeSys'},
         nocache: true
-      }
-    ]
-  },
-
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
       }
     ]
   },

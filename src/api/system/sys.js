@@ -3,7 +3,7 @@ import request from '@/utils/request'
 export default {
 
   //删除上传的头像
-  eletefile(filename) {
+  deletefile(filename) {
     return request({
       url: '/sys/deleteAvatar/' + filename,
       method: 'delete'
@@ -77,7 +77,4 @@ export default {
       method: 'delete',
     })
   },
-
-
-
 }

@@ -70,6 +70,10 @@
       </el-form>
 
       <el-table
+        v-loading="loading"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0.8)"
         :data="list"
         border
         fit
@@ -97,7 +101,7 @@
 
         <el-table-column  label="操作" align="center" width="250px" fixed="right">
           <template slot-scope="scope">
-            <el-button size="mini"  icon="el-icon-edit" circle @click="editThesisInfo(scope.row.T_THESIS_ID)">修改</el-button>
+            <el-button size="mini"  icon="el-icon-edit" circle @click="editThesisInfo(scope.row.T_THESIS_ID)">查看</el-button>
 
             <el-button type="success" size="mini" icon="el-icon-view" circle @click="viewThesis(scope.row.T_THESIS_ID)">浏览</el-button>
 
@@ -153,6 +157,7 @@
         name: "info",
       data() {
           return {
+            loading: true,
             thesis: {},
             list: null,
             page: 1,
@@ -175,7 +180,7 @@
               value: '审核通过'
               },
               {
-                key: 2,
+                key: 0,
                 value: '审核不通过'
               }
             ],
@@ -210,6 +215,7 @@
           .then(result => {
             this.list = result.OUT_DATA.data.data
             this.total = result.OUT_DATA.data.total
+            this.loading = false
           })
         },
 

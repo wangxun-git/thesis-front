@@ -52,11 +52,22 @@
       </el-form-item>
 
       <el-form-item label="培养层级">
-        <el-radio-group v-model="level">
-          <el-radio :label="item.T_STU_TYPE_ID" :key="item.T_STU_TYPE_ID" v-for="item in levellist" @change="handlerLevelChange()">
+        <el-radio-group v-model="student.T_STU_TYPE_ID">
+          <el-radio :label="item.T_STU_TYPE_ID" :key="item.T_STU_TYPE_ID" v-for="item in levellist">
             {{item.T_STU_TYPE_ZH_NAME}}
           </el-radio>
         </el-radio-group>
+      </el-form-item>
+
+      <el-form-item label="学位类别">
+        <el-select v-model="student.T_STU_DEGREE_ID" clearable placeholder="请选择学位类别" @change="handlerMajorChange()">
+          <el-option
+            v-for="item in majorlist"
+            :key="item.T_MAJOR_ID"
+            :label="item.T_MAJOR_NAME"
+            :value="item.T_MAJOR_ID">
+          </el-option>
+        </el-select>
       </el-form-item>
 
       <el-form-item label="双学位">
@@ -88,7 +99,6 @@
             majorlist: {},
             majorId: '',
             major: {},
-            level: '', //培养层级
             levellist: {},
             doubleDegree: ''
           }
@@ -131,11 +141,6 @@
 
         handlerMajorChange() {
           this.student.T_MAJOR_ID = this.majorId
-        },
-
-        //处理选中培养层级
-        handlerLevelChange() {
-          this.student.T_STU_TYPE_ID = this.level
         },
 
         handlerDegreeChange() {

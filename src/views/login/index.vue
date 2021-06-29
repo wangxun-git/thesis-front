@@ -14,25 +14,24 @@
           <el-form-item label="账号" prop="text">
             <el-input
               v-model="user.T_USER_ID"
-              placeholder="Enter UserID..."
+              placeholder="请输入账号"
             ></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
             <el-input
               v-model="user.T_PASSWORD"
+              placeholder="请输入密码"
               type="password"
-              placeholder="Enter Password..."
+              @keyup.enter.native="handleLogin('formValidator')"
             ></el-input>
           </el-form-item>
 
           <el-form-item>
             <el-button
               @click="handleLogin('formValidator')"
-              v-model="user.T_USER_IDENTITY = 2"
               type="primary"
               class="submit-btn"
-            >学生登录</el-button
-            >
+            >登录</el-button>
           </el-form-item>
 
           <!-- 找回密码 -->
@@ -41,41 +40,6 @@
           </div>
         </el-form>
         <!-- 注册 -->
-        <el-form
-          ref="user"
-          :rules="loginRules"
-          :model="user"
-          label-width="80px"
-          class="loginForm sign-up-form"
-        >
-          <el-form-item label="账号" prop="text">
-            <el-input
-              v-model="user.T_USER_ID"
-              placeholder="Enter UserID..."
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="密码" prop="password">
-            <el-input
-              v-model="user.T_PASSWORD"
-              type="password"
-              placeholder="Enter Password..."
-            ></el-input>
-          </el-form-item>
-
-          <el-form-item>
-            <el-button
-              @click="handleLogin('formValidator')"
-              type="primary"
-              class="submit-btn"
-            >老师登录</el-button
-            >
-          </el-form-item>
-
-          <!-- 找回密码 -->
-          <div class="tiparea">
-            <p>忘记密码? <a href="#">立即找回</a></p>
-          </div>
-        </el-form>
       </div>
     </div>
     <!-- 左右切换动画 -->
@@ -84,9 +48,9 @@
         <div class="content">
           <h3>学习是为了有更多的选择,让生活变的更美好!</h3>
           <p>何以解忧,唯有学习</p>
-          <button @click="signUpMode = !signUpMode" class="btn transparent">
-            管理员
-          </button>
+<!--          <button @click="signUpMode = !signUpMode" class="btn transparent">-->
+<!--            管理员-->
+<!--          </button>-->
         </div>
         <img src="@/assets/img/log.svg" class="image" alt="" />
       </div>
@@ -130,8 +94,7 @@
       return {
         user: {
           T_USER_ID: "",
-          T_PASSWORD: "",
-          T_USER_IDENTITY: ''
+          T_PASSWORD: ""
         },
         loginRules: {
           T_USER_ID: [
@@ -142,7 +105,7 @@
           ],
         },
         loading: false,
-        pwdType: "password",
+        passwordType: "password",
         redirect: undefined,
         signUpMode: false,
       };
@@ -177,7 +140,7 @@
                 this.loading = false;
               });
           } else {
-            alert("comein error");
+            alert("登录失败");
             return false;
           }
         });

@@ -14,6 +14,8 @@ import store from './store'
 
 import '@/icons' // icon
 import '@/permission' // permission control
+// i18n国际化
+import i18n from "@/lang";
 
 Vue.use(ElementUI, { locale })
 
@@ -23,6 +25,7 @@ new Vue({
   el: '#app',
   router,
   store,
+  i18n,
   render: h => h(App)
 })
 

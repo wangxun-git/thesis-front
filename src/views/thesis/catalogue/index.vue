@@ -3,10 +3,11 @@
       <router-view/>
 
       <!-- 步骤条 -->
-      <el-steps :active="3">
+      <el-steps :active="4">
         <el-step title="论文提交" icon="el-icon-upload"></el-step>
-        <el-step title="论文审核" icon="el-icon-edit-outline"></el-step>
-        <el-step title="论文归档" icon="el-icon-circle-check"></el-step>
+        <el-step title="导师审核" icon="el-icon-edit-outline"></el-step>
+        <el-step title="研究院审核" icon="el-icon-edit-outline"></el-step>
+        <el-step title="论文编目" icon="el-icon-circle-check"></el-step>
       </el-steps>
 
       <div v-show="showThesisInfo">
@@ -196,6 +197,12 @@
                   title: '编目通知',
                   message: '您的论文已完成编目',
                   type: 'success'
+                });
+              }else {
+                this.$notify({
+                  title: '编目通知',
+                  message: '您的论文正在编目中......',
+                  type: 'info'
                 });
               }
             })

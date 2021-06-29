@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import echarts from "echarts";
+  import * as echarts from 'echarts'
 import echartsTheme from "../echarts/theme/westeros.json";
-
+  import homeApi from '@/api/system/home.js'
 export default {
   data() {
     return {
@@ -32,40 +32,25 @@ export default {
           document.getElementById(this.id),
           "westeros"
         );
-        this.myChart.setOption(this.initOption(this.type));
+        //获取论文信息
+        homeApi.getThesisByStatus()
+          .then(result => {
+            const data = result.OUT_DATA.data
+            this.myChart.setOption(this.initOption(this.type, data));
+          })
       });
     },
-    initOption(type) {
+    initOption(type, outData) {
       let text, legend_data, series_data;
       if (type == "ordertype") {
         text = "论文提交情况";
-        legend_data = ["已提交", "未提交", "已审核", "待修改", "已收录"];
+        legend_data = ["等待审核", "审核通过", "审核不通过", "等待编目", "编目完成"];
         series_data = [
-          { value: 335, name: "已提交" },
-          { value: 310, name: "未提交" },
-          { value: 234, name: "已审核" },
-          { value: 135, name: "待修改" },
-          { value: 1548, name: "已收录" },
-        ];
-      } else {
-        text = "用户投资区域";
-        legend_data = [
-          "华东区",
-          "华南区",
-          "华中区",
-          "华北区",
-          "西南区",
-          "东北区",
-          "台港澳",
-        ];
-        series_data = [
-          { value: 335, name: "华东区" },
-          { value: 310, name: "华南区" },
-          { value: 234, name: "华中区" },
-          { value: 835, name: "华北区" },
-          { value: 1548, name: "西南区" },
-          { value: 335, name: "东北区" },
-          { value: 454, name: "台港澳" },
+          { value: outData.status0, name: "等待审核" },
+          { value: outData.status1, name: "审核通过" },
+          { value: outData.status2, name: "审核不通过" },
+          { value: outData.status3, name: "等待编目" },
+          { value: outData.status4, name: "编目完成" },
         ];
       }
       let data = {
@@ -84,7 +69,7 @@ export default {
         },
         series: [
           {
-            name: "访问来源",
+            name: "论文篇数",
             type: "pie",
             radius: "50%",
             center: ["50%", "60%"],

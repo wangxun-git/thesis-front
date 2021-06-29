@@ -161,7 +161,6 @@
 
       //下拉框选择
       handlerSelectChange() {
-        console.log('------')
         this.user.T_ROLE.T_ROLE_ID = this.roleId
       },
 

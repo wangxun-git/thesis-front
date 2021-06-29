@@ -105,6 +105,7 @@
         sataApi.getLoginsByCond(this.loginUser)
         .then(result => {
           const data = result.OUT_DATA.data
+          console.log(data)
           if (data == null) {
             this.$message({
               type: "warning",
@@ -185,7 +186,7 @@
           },
           grid: {
             left: '3%',
-            right: '4%',
+            right: '5%',
             bottom: '3%',
             containLabel: true
           },

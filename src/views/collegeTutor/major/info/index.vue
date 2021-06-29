@@ -119,7 +119,6 @@
   import { getToken } from '@/utils/auth'
 
     export default {
-      name: "index",
       data() {
           return {
             major: {},

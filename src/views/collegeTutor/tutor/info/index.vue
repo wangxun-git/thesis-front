@@ -76,7 +76,6 @@
             <el-button type="danger" size="mini" icon="el-icon-delete" circle @click="removeTutorInfo(scope.row.T_TUTOR_ID)">删除</el-button>
           </template>
         </el-table-column>
-
       </el-table>
 
       <!-- 分页 -->

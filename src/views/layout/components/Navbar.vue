@@ -4,7 +4,6 @@
     <breadcrumb />
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
-<!--        <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">-->
         <img :src="this.BASE_API + /avatar/ + avatar" class="user-avatar">
         <i class="el-icon-caret-bottom"/>
       </div>
@@ -15,7 +14,8 @@
           </el-dropdown-item>
         </router-link>
         <el-dropdown-item divided>
-          <span style="display:block;" @click="logout">退出</span>
+          <span style="display:block;" @click="logout"
+                v-loading.fullscreen.lock="fullscreenLoading">退出</span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -42,6 +42,7 @@ export default {
   data() {
     return {
       BASE_API: process.env.BASE_API,
+      fullscreenLoading: false
     }
   },
 
@@ -51,6 +52,7 @@ export default {
       this.$store.dispatch('ToggleSideBar')
     },
     logout() {
+      this.fullscreenLoading = true
       this.$store.dispatch('LogOut').then(() => {
         location.reload() // 为了重新实例化vue-router对象 避免bug
       })
