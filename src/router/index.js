@@ -21,9 +21,26 @@ import Layout from '../views/layout/Layout'
     icon: 'svg-name'             the icon show in the sidebar,
   }
 **/
-export const constantRouterMap = [
+export const constantRoutes = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
+  { path: '/home', component: () => import('@/views/home/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
+
+  { //通知页面 :id
+    path: '/notice',
+    name: '系统通知',
+    meta: {title: '系统通知'},
+    component: () => import('@/views/notice/index'),
+    hidden: true
+  },
+
+  { //通知页面 :id
+    path: '/faq',
+    name: 'FAQ',
+    meta: {title: 'FAQ'},
+    component: () => import('@/views/faq/index'),
+    hidden: true
+  },
 
   //首页
   {
@@ -337,7 +354,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/sysMana/emailSys',
     name: '系统管理',
-    meta: {title: '系统管理', icon: 'system'},
+    meta: {title: '系统管理', icon: 'system', roles: ['admin'], requireAuth: true},
     children: [
       {
         path: 'emailSys',
@@ -352,6 +369,13 @@ export const constantRouterMap = [
         name: '通知管理',
         meta: {title: '通知管理', icon: 'noticeSys'},
         nocache: true
+      },
+      {
+        path: 'faqSys',
+        component: () => import('@/views/sysMana/faqSys'),
+        name: 'FAQ管理',
+        meta: {title: 'FAQ管理', icon: 'FAQ'},
+        nocache: true
       }
     ]
   },
@@ -362,5 +386,55 @@ export const constantRouterMap = [
 export default new Router({
   // mode: 'history', //后端支持可开
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRouterMap
+  routes: constantRoutes
 })
+
+export const asyncRoutes = [ // 通过路由元信息meta.roles来设置访问权限，一般来说是个数组
+
+  {
+    path: '/systemMana',
+    component: Layout,
+    redirect: '/sysMana/emailSys',
+    name: '系统管理',
+    meta: {title: '系统管理', icon: 'system', roles: ['admin'], requireAuth: true},
+    children: [
+      {
+        path: 'emailSys',
+        component: () => import('@/views/sysMana/emailSys'),
+        name: '邮箱管理',
+        meta: {title: '邮箱管理', icon: 'emailSys'},
+        nocache: true
+      },
+      {
+        path: 'noticeSys',
+        component: () => import('@/views/sysMana/noticeSys'),
+        name: '通知管理',
+        meta: {title: '通知管理', icon: 'noticeSys'},
+        nocache: true
+      },
+      {
+        path: 'faqSys',
+        component: () => import('@/views/sysMana/faqSys'),
+        name: 'FAQ管理',
+        meta: {title: 'FAQ管理', icon: 'FAQ'},
+        nocache: true
+      }
+    ]
+  },
+
+
+  // {
+  //   path: '/permission',
+  //   component: Layout,
+  //   redirect: '/permission/page',
+  //   alwaysShow: true, // will always show the root menu
+  //   name: 'Permission',
+  //   meta: {
+  //     title: 'Permission',
+  //     icon: 'lock',
+  //     roles: ['admin', 'editor'] // 通过roles设置路由的权限
+  //   },
+  //   // ...
+  // }
+]
+

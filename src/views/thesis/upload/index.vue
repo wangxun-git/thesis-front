@@ -28,7 +28,7 @@
         </el-form-item>
 
         <el-form-item label="学号" :label-width="formWidth">
-          <el-input v-model="thesis.T_STU_ID" clearable class="input-width" placeholder="上传论文后可自动回显"/>
+          <el-input v-model="thesis.T_STU_ID" clearable class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
         </el-form-item>
 
         <el-form-item label="学院名称" :label-width="formWidth">
@@ -55,7 +55,7 @@
 
         <el-form-item label="答辩日期" :label-width="formWidth">
           <el-col :span="11">
-            <el-date-picker type="date" placeholder="选择日期" v-model="thesis.T_THESIS_DEFENCE_TIME"></el-date-picker>
+            <el-date-picker type="date" placeholder="选择日期" v-model="thesis.T_THESIS_DEFENCE_TIME" @input="change($event)"/>
           </el-col>
         </el-form-item>
 
@@ -64,12 +64,17 @@
             v-model="thesis.T_THESIS_FIN_TIME"
             type="year"
             value-format="yyyy"
-            placeholder="选择年">
+            placeholder="选择年"
+            @input="change($event)">
           </el-date-picker>
         </el-form-item>
 
+        <el-form-item label="分类号" :label-width="formWidth">
+          <el-input v-model="thesis.T_CH_LIB_CLASS" class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
+        </el-form-item>
+
         <el-form-item label="导师" :label-width="formWidth">
-          <el-input v-model="thesis.T_TUTOR_NAME" class="input-width" placeholder="请使用;号分隔"></el-input>
+          <el-input v-model="thesis.T_TUTOR_NAME" class="input-width" placeholder="请使用;号分隔" @input="change($event)"/>
         </el-form-item>
 
         <el-form-item label="学科" :label-width="formWidth">
@@ -79,11 +84,13 @@
             @change="handleChange"
             @active-item-change="handleExpandChange"
             clearable
-            :placeholder="subjectValue"/>
+            :placeholder="subjectValue"
+            @input="change($event)"
+            width="100px"/>
         </el-form-item>
 
         <el-form-item label="保密程度" :label-width="formWidth">
-          <el-select v-model="secercyValue" clearable placeholder="请选择保密程度" @change="handlerSecercyChange">
+          <el-select v-model="secercyValue" clearable placeholder="请选择保密程度" @change="handlerSecercyChange" @input="change($event)">
             <el-option
               v-for="item in secrecyLevel"
               :key="item.id"
@@ -94,27 +101,27 @@
         </el-form-item>
 
         <el-form-item label="研究方向" :label-width="formWidth">
-          <el-input v-model="thesis.T_RESEARCH_DIRE" class="input-width" placeholder="上传论文后可自动回显"></el-input>
+          <el-input v-model="thesis.T_RESEARCH_DIRE" class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
         </el-form-item>
 
         <el-form-item label="论文题目" :label-width="formWidth">
-          <el-input v-model="thesis.T_THESIS_ZH_TITLE" class="input-width" placeholder="上传论文后可自动回显"></el-input>
+          <el-input v-model="thesis.T_THESIS_ZH_TITLE" class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
         </el-form-item>
 
         <el-form-item label="英文题目" :label-width="formWidth">
-          <el-input v-model="thesis.T_THESIS_EN_TITLE" class="input-width" placeholder="上传论文后可自动回显"></el-input>
+          <el-input v-model="thesis.T_THESIS_EN_TITLE" class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
         </el-form-item>
 
         <el-form-item label="关键词" :label-width="formWidth">
-          <el-input v-model="thesis.T_THESIS_ZH_KEY" class="input-width" placeholder="上传论文后可自动回显"/>
+          <el-input v-model="thesis.T_THESIS_ZH_KEY" class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
         </el-form-item>
 
         <el-form-item label="英文关键词" :label-width="formWidth">
-          <el-input v-model="thesis.T_THESIS_EN_KEY" class="input-width" placeholder="上传论文后可自动回显"/>
+          <el-input v-model="thesis.T_THESIS_EN_KEY" class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
         </el-form-item>
 
         <el-form-item label="论文页数" :label-width="formWidth">
-          <el-input v-model="thesis.T_THESIS_PAGE_NUMBER"></el-input>
+          <el-input v-model="thesis.T_THESIS_PAGE_NUMBER" @input="change($event)"/>
         </el-form-item>
 
         <el-form-item label="摘要(上传论文后可自动回显)"/>
@@ -156,6 +163,7 @@
           T_COLLEGE_ID: '',
           T_TUTOR_NAME: '',
           T_MAJOR_ID: '',
+          T_CH_LIB_CLASS: '',
           T_RESEARCH_DIRE: '',
           T_SUBJECT_CODE: '',
           T_THESIS_ZH_TITLE: '',
@@ -212,6 +220,10 @@
     },
 
     methods: {
+
+      change() {
+        this.$forceUpdate()
+      },
 
       handleMajorChange() {
         this.$forceUpdate()
@@ -319,6 +331,7 @@
           this.thesis.T_TUTOR_NAME = data.tutorName
           this.thesis.T_THESIS_FIN_TIME = data.thesisYear
           this.thesis.T_THESIS_DEFENCE_TIME = data.thesisDate
+          this.thesis.T_CH_LIB_CLASS = data.chLib
           this.secercyValue = data.secrecy
           if ('公开' == data.secrecy) {
             this.thesis.T_SECRECY_LEVEL = 0
@@ -339,15 +352,16 @@
       },
 
       submitThesisInfo() {
-        thesisApi.submitThesis(this.thesis)
-          .then(result => {
-            this.$message({
-              type: "success",
-              message: "提交成功"
-            })
-            //跳转页面
-            this.$router.push({path: '/thesis/approved'})
-          })
+        console.log(this.thesis)
+        // thesisApi.submitThesis(this.thesis)
+        //   .then(result => {
+        //     this.$message({
+        //       type: "success",
+        //       message: "提交成功"
+        //     })
+        //     //跳转页面
+        //     this.$router.push({path: '/thesis/approved'})
+        //   })
       },
 
       //处理学科代码
@@ -358,7 +372,6 @@
 
       //处理选中的保密层级
       handlerSecercyChange(value) {
-        console.log(value)
         this.thesis.T_SECRECY_LEVEL = value
       },
 

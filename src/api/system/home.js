@@ -56,6 +56,22 @@ export default {
       url: '/home/getThesisTimeLine',
       method: 'get',
     })
+  },
+
+  //获取验证码
+  getCaptcha(userId, email) {
+    return request({
+      url: '/sys/send_emcode/' + userId + '/' + email,
+      method: 'get',
+    })
+  },
+
+  updatePwd(user) {
+    return request({
+      url: '/sys/updatePwd',
+      method: 'post',
+      data: user
+    })
   }
 
 }

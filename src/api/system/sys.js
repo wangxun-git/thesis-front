@@ -77,4 +77,45 @@ export default {
       method: 'delete',
     })
   },
+
+  //获取全部faq信息
+  getAllFaq() {
+    return request({
+      url: '/faq/getAllFaq',
+      method: 'get'
+    })
+  },
+
+  //添加faq信息
+  saveFaq(faq) {
+    return request({
+      url: '/faq/saveFaq',
+      method: 'post',
+      data: faq
+    })
+  },
+
+  //修改通知公告信息
+  updateFaq(faq) {
+    return request({
+      url: '/faq/updateFaq',
+      method: 'put',
+      data: faq
+    })
+  },
+
+  //删除通知公告信息
+  removeFaq(faqId) {
+    return request({
+      url: '/faq/deleteFaq/' + faqId,
+      method: 'delete',
+    })
+  },
+
+  getOneFaq(faqId) {
+    return request({
+      url: '/faq/getOneFaq/' + faqId,
+      method: 'get',
+    })
+  }
 }

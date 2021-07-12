@@ -15,15 +15,11 @@
               </p>
               <br>
               <div class="logContent">
-<!--                <p class="title">更新内容：</p>-->
-<!--                <el-link class="a-title" href="https://element.eleme.io" target="_blank">{{notice.T_NOTICE_TITLE}}</el-link>-->
-
                 <p class="title">更新内容：</p>
                 <ul class="logUl">
                   <li>{{notice.T_NOTICE_TITLE}}
                     <el-button size="mini" type="success" round @click="dialogTableVisible = true, setContext(notice)">查看详情</el-button>
                   </li>
-<!--                  -->
                 </ul>
               </div>
           </div>
@@ -43,7 +39,6 @@
 
         </el-form>
       </el-dialog>
-
 
     </el-card>
   </div>

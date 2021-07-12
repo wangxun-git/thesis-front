@@ -53,19 +53,19 @@
 
       <el-form-item label="培养层级">
         <el-radio-group v-model="student.T_STU_TYPE_ID">
-          <el-radio :label="item.T_STU_TYPE_ID" :key="item.T_STU_TYPE_ID" v-for="item in levellist">
+          <el-radio :label="item.T_STU_TYPE_ID" :key="item.T_STU_TYPE_ID" v-for="item in levellist" @change="handlerStuTypeId">
             {{item.T_STU_TYPE_ZH_NAME}}
           </el-radio>
         </el-radio-group>
       </el-form-item>
 
       <el-form-item label="学位类别">
-        <el-select v-model="student.T_STU_DEGREE_ID" clearable placeholder="请选择学位类别" @change="handlerMajorChange()">
+        <el-select v-model="student.T_STU_DEGREE_ID" clearable placeholder="请选择学位类别">
           <el-option
-            v-for="item in majorlist"
-            :key="item.T_MAJOR_ID"
-            :label="item.T_MAJOR_NAME"
-            :value="item.T_MAJOR_ID">
+            v-for="item in degreeList"
+            :key="item.T_STU_DEGREE_ID"
+            :label="item.T_STU_DEGREE_ZH_NAME"
+            :value="item.T_STU_DEGREE_ID">
           </el-option>
         </el-select>
       </el-form-item>
@@ -88,6 +88,7 @@
   import studentApi from '@/api/custome/student.js'
   import collegeApi from '@/api/collegeTutor/college.js'
   import majorApi from '@/api/collmajor/major.js'
+  import stuDegreeApi from '@/api/stuDegree/stuDegree'
 
     export default {
       name: "index",
@@ -100,7 +101,10 @@
             majorId: '',
             major: {},
             levellist: {},
-            doubleDegree: ''
+            doubleDegree: '',
+            degreeList: {},
+            page: 1,
+            stuDegree: {},
           }
       },
 
@@ -125,6 +129,17 @@
           studentApi.getStuTypeInfo()
           .then(result => {
             this.levellist = result.OUT_DATA.data
+          })
+        },
+
+        //填充学位级别信息
+        handlerStuTypeId() {
+          this.stuDegree.T_STU_TYPE_ID = this.student.T_STU_TYPE_ID
+          stuDegreeApi.getStuDegreeByCond(this.page, this.stuDegree)
+          .then(result => {
+            const data = result.OUT_DATA.data
+            this.degreeList = data.data
+            this.student.T_STU_DEGREE_ID = this.degreeList[0].T_STU_DEGREE_ID
           })
         },
 

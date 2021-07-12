@@ -50,6 +50,10 @@
         <el-input v-model="thesis.T_SUBJECT_NAME" class="input-width" :disabled="editThesis"/>
       </el-form-item>
 
+      <el-form-item label="分类号" :label-width="formWidth">
+        <el-input v-model="thesis.T_CH_LIB_CLASS" class="input-width" placeholder="上传论文后可自动回显" :disabled="editThesis"/>
+      </el-form-item>
+
       <el-form-item label="导师" :label-width="formWidth">
         <el-input v-model="thesis.T_TUTOR_NAME" class="input-width" placeholder="请使用;号分隔" :disabled="editThesis"></el-input>
       </el-form-item>
@@ -102,7 +106,7 @@
 
 <script>
   //引入富文本编译器
-  import Tinymce from '@/components/Tinymce'
+  import Tinymce from '@/components/Tinymce/readOnly'
   import thesisApi from '@/api/thesis/thesis.js'
   import collegeApi from '@/api/collegeTutor/college.js'
   import majorApi from '@/api/collmajor/major.js'

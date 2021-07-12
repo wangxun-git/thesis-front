@@ -23,3 +23,11 @@ export function logout(token) {
     params: {token}
   })
 }
+
+// 获取菜单权限数据
+export function getMenu(roleCode) {
+  return request({
+    url: '/auth/getMenu/' + roleCode,
+    method: 'get'
+  })
+}
