@@ -353,15 +353,15 @@
 
       submitThesisInfo() {
         console.log(this.thesis)
-        // thesisApi.submitThesis(this.thesis)
-        //   .then(result => {
-        //     this.$message({
-        //       type: "success",
-        //       message: "提交成功"
-        //     })
-        //     //跳转页面
-        //     this.$router.push({path: '/thesis/approved'})
-        //   })
+        thesisApi.submitThesis(this.thesis)
+          .then(result => {
+            this.$message({
+              type: "success",
+              message: "提交成功"
+            })
+            //跳转页面
+            this.$router.push({path: '/thesis/approved'})
+          })
       },
 
       //处理学科代码
@@ -416,8 +416,6 @@
 
     }
   }
-
-
 
 </script>
 

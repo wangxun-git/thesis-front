@@ -35,7 +35,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="导师职称">
+      <el-form-item label="归属学院">
         <el-select v-model="tutor.T_COLLEGE_ID" clearable placeholder="请选择院系信息">
           <el-option
             v-for="item in collegeList"
@@ -46,7 +46,7 @@
         </el-select>
       </el-form-item>
 
-      <el-button type="success" :disabled="saveBtnDisabled" @click="saveOrUpdateTutor">保存</el-button>
+      <el-button type="success" @click="saveOrUpdateTutor">保存</el-button>
     </el-form>
   </div>
 </template>
@@ -67,7 +67,6 @@
             stutypeList: null,
             stutype: {},
             collegeList: null,
-            saveBtnDisabled: false,
             editTutorId: false
           }
       },
@@ -126,7 +125,6 @@
           }else {
             this.updateTutorInfo()
           }
-          this.saveBtnDisabled = true
         },
 
         updateTutorInfo() {
@@ -137,7 +135,7 @@
               message : "修改成功"
             })
 
-            this.$router.push({path: '/collegeTutor/tutor/info'})
+            this.$router.push({path: '/userMana/tutor/info'})
           })
         },
 

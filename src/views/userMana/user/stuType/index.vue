@@ -4,7 +4,7 @@
 
     <el-form :inline="true" class="demo-from-inline">
       <el-form-item>
-        <el-input v-model="stutype.T_STU_TYPE_ZH_NAME" placeholder="类型职称名称"></el-input>
+        <el-input v-model="stutype.T_STU_TYPE_ZH_NAME" placeholder="类型职称名称" clearable></el-input>
       </el-form-item>
 
       <el-form-item>

@@ -1,228 +1,362 @@
 <template>
-  <div class="wscn-http404-container">
-    <div class="wscn-http404">
-      <div class="pic-404">
-        <img class="pic-404__parent" src="@/assets/404_images/404.png" alt="404">
-        <img class="pic-404__child left" src="@/assets/404_images/404_cloud.png" alt="404">
-        <img class="pic-404__child mid" src="@/assets/404_images/404_cloud.png" alt="404">
-        <img class="pic-404__child right" src="@/assets/404_images/404_cloud.png" alt="404">
-      </div>
-      <div class="bullshit">
-        <div class="bullshit__oops">OOPS!</div>
-        <div class="bullshit__info">版权所有
-          <a class="link-type" href="https://wallstreetcn.com" target="_blank">华尔街见闻</a>
+  <div class="body">
+    <div class="rail">
+      <div class="stamp four">4</div>
+      <div class="stamp zero">0</div>
+      <div class="stamp four">4</div>
+      <div class="stamp zero">0</div>
+      <div class="stamp four">4</div>
+      <div class="stamp zero">0</div>
+      <div class="stamp four">4</div>
+      <div class="stamp zero">0</div>
+      <div class="stamp four">4</div>
+      <div class="stamp zero">0</div>
+      <div class="stamp four">4</div>
+      <div class="stamp zero">0</div>
+      <div class="stamp four">4</div>
+      <div class="stamp zero">0</div>
+      <div class="stamp four">4</div>
+      <div class="stamp zero">0</div>
+      <div class="stamp four">4</div>
+      <div class="stamp zero">0</div>
+      <div class="stamp four">4</div>
+      <div class="stamp zero">0</div>
+    </div>
+    <div class="world">
+      <div class="forward">
+        <div class="box">
+          <div class="wall"></div>
+          <div class="wall"></div>
+          <div class="wall"></div>
+          <div class="wall"></div>
+          <div class="wall"></div>
+          <div class="wall"></div>
         </div>
-        <div class="bullshit__headline">{{ message }}</div>
-        <div class="bullshit__info">请检查您输入的网址是否正确，请点击以下按钮返回主页或者发送错误报告</div>
-        <a href="" class="bullshit__return-home">返回首页</a>
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
 
-export default {
-  name: 'Page404',
-  computed: {
-    message() {
-      return '您访问的页面不存在.'
+  export default {
+    name: 'Page404',
+    computed: {
+      message() {
+        return '您访问的页面不存在.'
+      }
     }
   }
-}
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
-.wscn-http404-container{
-  transform: translate(-50%,-50%);
-  position: absolute;
-  top: 40%;
-  left: 50%;
-}
-.wscn-http404 {
-  position: relative;
-  width: 1200px;
-  padding: 0 50px;
-  overflow: hidden;
-  .pic-404 {
-    position: relative;
-    float: left;
-    width: 600px;
+
+<style>
+  .body {
+    background: #000;
+    height: 100vh;
     overflow: hidden;
-    &__parent {
-      width: 100%;
+    display: flex;
+    font-family: 'Anton', sans-serif;
+    justify-content: center;
+    align-items: center;
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+  }
+
+  div {
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+  }
+
+  .rail {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-transform: rotateX(-30deg) rotateY(-30deg);
+    transform: rotateX(-30deg) rotateY(-30deg);
+  }
+  .rail .stamp {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #141414;
+    color: #fff;
+    font-size: 7rem;
+  }
+  .rail .stamp:nth-child(1) {
+    -webkit-animation: stampSlide 40000ms -2300ms linear infinite;
+    animation: stampSlide 40000ms -2300ms linear infinite;
+  }
+  .rail .stamp:nth-child(2) {
+    -webkit-animation: stampSlide 40000ms -4300ms linear infinite;
+    animation: stampSlide 40000ms -4300ms linear infinite;
+  }
+  .rail .stamp:nth-child(3) {
+    -webkit-animation: stampSlide 40000ms -6300ms linear infinite;
+    animation: stampSlide 40000ms -6300ms linear infinite;
+  }
+  .rail .stamp:nth-child(4) {
+    -webkit-animation: stampSlide 40000ms -8300ms linear infinite;
+    animation: stampSlide 40000ms -8300ms linear infinite;
+  }
+  .rail .stamp:nth-child(5) {
+    -webkit-animation: stampSlide 40000ms -10300ms linear infinite;
+    animation: stampSlide 40000ms -10300ms linear infinite;
+  }
+  .rail .stamp:nth-child(6) {
+    -webkit-animation: stampSlide 40000ms -12300ms linear infinite;
+    animation: stampSlide 40000ms -12300ms linear infinite;
+  }
+  .rail .stamp:nth-child(7) {
+    -webkit-animation: stampSlide 40000ms -14300ms linear infinite;
+    animation: stampSlide 40000ms -14300ms linear infinite;
+  }
+  .rail .stamp:nth-child(8) {
+    -webkit-animation: stampSlide 40000ms -16300ms linear infinite;
+    animation: stampSlide 40000ms -16300ms linear infinite;
+  }
+  .rail .stamp:nth-child(9) {
+    -webkit-animation: stampSlide 40000ms -18300ms linear infinite;
+    animation: stampSlide 40000ms -18300ms linear infinite;
+  }
+  .rail .stamp:nth-child(10) {
+    -webkit-animation: stampSlide 40000ms -20300ms linear infinite;
+    animation: stampSlide 40000ms -20300ms linear infinite;
+  }
+  .rail .stamp:nth-child(11) {
+    -webkit-animation: stampSlide 40000ms -22300ms linear infinite;
+    animation: stampSlide 40000ms -22300ms linear infinite;
+  }
+  .rail .stamp:nth-child(12) {
+    -webkit-animation: stampSlide 40000ms -24300ms linear infinite;
+    animation: stampSlide 40000ms -24300ms linear infinite;
+  }
+  .rail .stamp:nth-child(13) {
+    -webkit-animation: stampSlide 40000ms -26300ms linear infinite;
+    animation: stampSlide 40000ms -26300ms linear infinite;
+  }
+  .rail .stamp:nth-child(14) {
+    -webkit-animation: stampSlide 40000ms -28300ms linear infinite;
+    animation: stampSlide 40000ms -28300ms linear infinite;
+  }
+  .rail .stamp:nth-child(15) {
+    -webkit-animation: stampSlide 40000ms -30300ms linear infinite;
+    animation: stampSlide 40000ms -30300ms linear infinite;
+  }
+  .rail .stamp:nth-child(16) {
+    -webkit-animation: stampSlide 40000ms -32300ms linear infinite;
+    animation: stampSlide 40000ms -32300ms linear infinite;
+  }
+  .rail .stamp:nth-child(17) {
+    -webkit-animation: stampSlide 40000ms -34300ms linear infinite;
+    animation: stampSlide 40000ms -34300ms linear infinite;
+  }
+  .rail .stamp:nth-child(18) {
+    -webkit-animation: stampSlide 40000ms -36300ms linear infinite;
+    animation: stampSlide 40000ms -36300ms linear infinite;
+  }
+  .rail .stamp:nth-child(19) {
+    -webkit-animation: stampSlide 40000ms -38300ms linear infinite;
+    animation: stampSlide 40000ms -38300ms linear infinite;
+  }
+  .rail .stamp:nth-child(20) {
+    -webkit-animation: stampSlide 40000ms -40300ms linear infinite;
+    animation: stampSlide 40000ms -40300ms linear infinite;
+  }
+
+  @-webkit-keyframes stampSlide {
+    0% {
+      -webkit-transform: rotateX(90deg) rotateZ(-90deg) translateZ(-200px) translateY(130px);
+      transform: rotateX(90deg) rotateZ(-90deg) translateZ(-200px) translateY(130px);
     }
-    &__child {
-      position: absolute;
-      &.left {
-        width: 80px;
-        top: 17px;
-        left: 220px;
-        opacity: 0;
-        animation-name: cloudLeft;
-        animation-duration: 2s;
-        animation-timing-function: linear;
-        animation-fill-mode: forwards;
-        animation-delay: 1s;
-      }
-      &.mid {
-        width: 46px;
-        top: 10px;
-        left: 420px;
-        opacity: 0;
-        animation-name: cloudMid;
-        animation-duration: 2s;
-        animation-timing-function: linear;
-        animation-fill-mode: forwards;
-        animation-delay: 1.2s;
-      }
-      &.right {
-        width: 62px;
-        top: 100px;
-        left: 500px;
-        opacity: 0;
-        animation-name: cloudRight;
-        animation-duration: 2s;
-        animation-timing-function: linear;
-        animation-fill-mode: forwards;
-        animation-delay: 1s;
-      }
-      @keyframes cloudLeft {
-        0% {
-          top: 17px;
-          left: 220px;
-          opacity: 0;
-        }
-        20% {
-          top: 33px;
-          left: 188px;
-          opacity: 1;
-        }
-        80% {
-          top: 81px;
-          left: 92px;
-          opacity: 1;
-        }
-        100% {
-          top: 97px;
-          left: 60px;
-          opacity: 0;
-        }
-      }
-      @keyframes cloudMid {
-        0% {
-          top: 10px;
-          left: 420px;
-          opacity: 0;
-        }
-        20% {
-          top: 40px;
-          left: 360px;
-          opacity: 1;
-        }
-        70% {
-          top: 130px;
-          left: 180px;
-          opacity: 1;
-        }
-        100% {
-          top: 160px;
-          left: 120px;
-          opacity: 0;
-        }
-      }
-      @keyframes cloudRight {
-        0% {
-          top: 100px;
-          left: 500px;
-          opacity: 0;
-        }
-        20% {
-          top: 120px;
-          left: 460px;
-          opacity: 1;
-        }
-        80% {
-          top: 180px;
-          left: 340px;
-          opacity: 1;
-        }
-        100% {
-          top: 200px;
-          left: 300px;
-          opacity: 0;
-        }
-      }
+    100% {
+      -webkit-transform: rotateX(90deg) rotateZ(-90deg) translateZ(-200px) translateY(-3870px);
+      transform: rotateX(90deg) rotateZ(-90deg) translateZ(-200px) translateY(-3870px);
     }
   }
-  .bullshit {
-    position: relative;
-    float: left;
-    width: 300px;
-    padding: 30px 0;
-    overflow: hidden;
-    &__oops {
-      font-size: 32px;
-      font-weight: bold;
-      line-height: 40px;
-      color: #1482f0;
-      opacity: 0;
-      margin-bottom: 20px;
-      animation-name: slideUp;
-      animation-duration: 0.5s;
-      animation-fill-mode: forwards;
+
+  @keyframes stampSlide {
+    0% {
+      -webkit-transform: rotateX(90deg) rotateZ(-90deg) translateZ(-200px) translateY(130px);
+      transform: rotateX(90deg) rotateZ(-90deg) translateZ(-200px) translateY(130px);
     }
-    &__headline {
-      font-size: 20px;
-      line-height: 24px;
-      color: #222;
-      font-weight: bold;
-      opacity: 0;
-      margin-bottom: 10px;
-      animation-name: slideUp;
-      animation-duration: 0.5s;
-      animation-delay: 0.1s;
-      animation-fill-mode: forwards;
-    }
-    &__info {
-      font-size: 13px;
-      line-height: 21px;
-      color: grey;
-      opacity: 0;
-      margin-bottom: 30px;
-      animation-name: slideUp;
-      animation-duration: 0.5s;
-      animation-delay: 0.2s;
-      animation-fill-mode: forwards;
-    }
-    &__return-home {
-      display: block;
-      float: left;
-      width: 110px;
-      height: 36px;
-      background: #1482f0;
-      border-radius: 100px;
-      text-align: center;
-      color: #ffffff;
-      opacity: 0;
-      font-size: 14px;
-      line-height: 36px;
-      cursor: pointer;
-      animation-name: slideUp;
-      animation-duration: 0.5s;
-      animation-delay: 0.3s;
-      animation-fill-mode: forwards;
-    }
-    @keyframes slideUp {
-      0% {
-        transform: translateY(60px);
-        opacity: 0;
-      }
-      100% {
-        transform: translateY(0);
-        opacity: 1;
-      }
+    100% {
+      -webkit-transform: rotateX(90deg) rotateZ(-90deg) translateZ(-200px) translateY(-3870px);
+      transform: rotateX(90deg) rotateZ(-90deg) translateZ(-200px) translateY(-3870px);
     }
   }
-}
+  .world {
+    -webkit-transform: rotateX(-30deg) rotateY(-30deg);
+    transform: rotateX(-30deg) rotateY(-30deg);
+  }
+  .world .forward {
+    position: absolute;
+    -webkit-animation: slide 2000ms linear infinite;
+    animation: slide 2000ms linear infinite;
+  }
+  .world .box {
+    width: 200px;
+    height: 200px;
+    -webkit-transform-origin: 100% 100%;
+    transform-origin: 100% 100%;
+    -webkit-animation: roll 2000ms cubic-bezier(1, 0.01, 1, 1) infinite;
+    animation: roll 2000ms cubic-bezier(1, 0.01, 1, 1) infinite;
+  }
+  .world .box .wall {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: rgba(10, 10, 10, 0.8);
+    border: 1px solid #fafafa;
+    box-sizing: border-box;
+  }
+  .world .box .wall::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 7rem;
+  }
+  .world .box .wall:nth-child(1) {
+    -webkit-transform: translateZ(100px);
+    transform: translateZ(100px);
+  }
+  .world .box .wall:nth-child(2) {
+    -webkit-transform: rotateX(180deg) translateZ(100px);
+    transform: rotateX(180deg) translateZ(100px);
+  }
+  .world .box .wall:nth-child(3) {
+    -webkit-transform: rotateX(90deg) translateZ(100px);
+    transform: rotateX(90deg) translateZ(100px);
+  }
+  .world .box .wall:nth-child(3)::before {
+    -webkit-transform: rotateX(180deg) rotateZ(90deg) translateZ(-1px);
+    transform: rotateX(180deg) rotateZ(90deg) translateZ(-1px);
+    -webkit-animation: zeroFour 4000ms -2000ms linear infinite;
+    animation: zeroFour 4000ms -2000ms linear infinite;
+  }
+  .world .box .wall:nth-child(4) {
+    -webkit-transform: rotateX(-90deg) translateZ(100px);
+    transform: rotateX(-90deg) translateZ(100px);
+  }
+  .world .box .wall:nth-child(4)::before {
+    -webkit-transform: rotateX(180deg) rotateZ(-90deg) translateZ(-1px);
+    transform: rotateX(180deg) rotateZ(-90deg) translateZ(-1px);
+    -webkit-animation: zeroFour 4000ms -2000ms linear infinite;
+    animation: zeroFour 4000ms -2000ms linear infinite;
+  }
+  .world .box .wall:nth-child(5) {
+    -webkit-transform: rotateY(90deg) translateZ(100px);
+    transform: rotateY(90deg) translateZ(100px);
+  }
+  .world .box .wall:nth-child(5)::before {
+    -webkit-transform: rotateX(180deg) translateZ(-1px);
+    transform: rotateX(180deg) translateZ(-1px);
+    -webkit-animation: zeroFour 4000ms linear infinite;
+    animation: zeroFour 4000ms linear infinite;
+  }
+  .world .box .wall:nth-child(6) {
+    -webkit-transform: rotateY(-90deg) translateZ(100px);
+    transform: rotateY(-90deg) translateZ(100px);
+  }
+  .world .box .wall:nth-child(6)::before {
+    -webkit-transform: rotateX(180deg) rotateZ(180deg) translateZ(-1px);
+    transform: rotateX(180deg) rotateZ(180deg) translateZ(-1px);
+    -webkit-animation: zeroFour 4000ms linear infinite;
+    animation: zeroFour 4000ms linear infinite;
+  }
+
+  @-webkit-keyframes zeroFour {
+    0% {
+      content: '4';
+    }
+    100% {
+      content: '0';
+    }
+  }
+
+  @keyframes zeroFour {
+    0% {
+      content: '4';
+    }
+    100% {
+      content: '0';
+    }
+  }
+  @-webkit-keyframes roll {
+    0% {
+      -webkit-transform: rotateZ(0deg);
+      transform: rotateZ(0deg);
+    }
+    85% {
+      -webkit-transform: rotateZ(90deg);
+      transform: rotateZ(90deg);
+    }
+    87% {
+      -webkit-transform: rotateZ(88deg);
+      transform: rotateZ(88deg);
+    }
+    90% {
+      -webkit-transform: rotateZ(90deg);
+      transform: rotateZ(90deg);
+    }
+    100% {
+      -webkit-transform: rotateZ(90deg);
+      transform: rotateZ(90deg);
+    }
+  }
+  @keyframes roll {
+    0% {
+      -webkit-transform: rotateZ(0deg);
+      transform: rotateZ(0deg);
+    }
+    85% {
+      -webkit-transform: rotateZ(90deg);
+      transform: rotateZ(90deg);
+    }
+    87% {
+      -webkit-transform: rotateZ(88deg);
+      transform: rotateZ(88deg);
+    }
+    90% {
+      -webkit-transform: rotateZ(90deg);
+      transform: rotateZ(90deg);
+    }
+    100% {
+      -webkit-transform: rotateZ(90deg);
+      transform: rotateZ(90deg);
+    }
+  }
+  @-webkit-keyframes slide {
+    0% {
+      -webkit-transform: translateX(0);
+      transform: translateX(0);
+    }
+    100% {
+      -webkit-transform: translateX(-200px);
+      transform: translateX(-200px);
+    }
+  }
+  @keyframes slide {
+    0% {
+      -webkit-transform: translateX(0);
+      transform: translateX(0);
+    }
+    100% {
+      -webkit-transform: translateX(-200px);
+      transform: translateX(-200px);
+    }
+  }
+
 </style>

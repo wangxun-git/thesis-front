@@ -216,6 +216,15 @@
           let stuId = this.selectStudentList[i].T_STU_ID
           this.stuIdList.push(stuId)
         }
+        console.log('+++++')
+        console.log(this.stuIdList)
+        if (this.stuIdList.length == 0 || this.stuIdList == []) {
+          this.$message({
+            type: "error",
+            message: '请选择学生信息'
+          })
+          return
+        }
         studentApi.exportStudentExcel(this.stuIdList)  //文件导出
         .then(result => {
           if (!result) {
@@ -232,7 +241,7 @@
           document.body.removeChild(link)
         }).catch(error => {
           console.error(error)
-        })
+        });
       },
 
       beforeRemove(file, fileList){

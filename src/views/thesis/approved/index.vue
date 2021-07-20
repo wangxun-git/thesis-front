@@ -195,7 +195,7 @@
             options: [],  //学科信息
             subject: {},
             subjectCode: '',
-            subjectName: 'asd'
+            subjectName: ''
           }
       },
 
@@ -308,8 +308,6 @@
             if (2 == this.thesis.T_THESIS_STATUS || 7 == this.thesis.T_THESIS_STATUS) {
               thesisApi.getNotPassThesisAppr(this.thesis.T_THESIS_ID)
                 .then(result1 => {
-                  console.log('++++++')
-
                   const data = result1.OUT_DATA.data
                   //弹出通知框
                   this.$notify({

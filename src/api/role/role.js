@@ -1,8 +1,19 @@
 import request from '@/utils/request'
 
-export function getRoles() {
-  return request({
-    url: '/auth/getRoles',
-    method: 'get'
-  })
+export default {
+  getRoles() {
+    return request({
+      url: '/auth/getRoles',
+      method: 'get'
+    })
+  },
+
+  getRolesByCond(role) {
+    return request({
+      url: '/auth/getCondRoles',
+      method: 'post',
+      data: role
+    })
+  }
 }
+

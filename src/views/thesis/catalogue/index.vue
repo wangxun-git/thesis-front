@@ -159,8 +159,6 @@
         this.getCollegeInfo()
         //获取登录用户的论文信息
         this.getThesisInfoByStuId()
-        //判断登录用户是否提交论文，论文所处状态
-        this.getThesisStatusInfo()
       },
 
       methods: {
@@ -194,14 +192,14 @@
               //编目完成
               if (4 == this.thesis.T_THESIS_STATUS) {
                 this.$notify({
-                  title: '编目通知',
-                  message: '您的论文已完成编目',
+                  title: '归档通知',
+                  message: '您的论文已完成归档',
                   type: 'success'
                 });
               }else {
                 this.$notify({
-                  title: '编目通知',
-                  message: '您的论文正在编目中......',
+                  title: '归档通知',
+                  message: '您的论文正在归档中......',
                   type: 'info'
                 });
               }

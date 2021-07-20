@@ -4,7 +4,7 @@
 
 <script>
   import * as echarts from 'echarts'
-import echartsTheme from "../echarts/theme/westeros.json";
+  import echartsTheme from "../echarts/theme/westeros.json";
   import homeApi from '@/api/system/home.js'
 
 export default {
@@ -28,7 +28,8 @@ export default {
   methods: {
     loadChart() {
       this.$nextTick(() => {
-        this.myChart = echarts.init(document.getElementById(this.id));
+        echarts.registerTheme("westeros", echartsTheme);
+        this.myChart = echarts.init(document.getElementById(this.id), "westeros");
         homeApi.getThesisByCollege()
         .then(result => {
           const data = result.OUT_DATA.data
@@ -42,13 +43,15 @@ export default {
       let max = data.maxCount + 10
       let indicator = []
       nameList.forEach(item => indicator.push({
-        'text': item,
+        'name': item,
         'max': max
       }))
       let option = {
+        title: {
+          text: '各学院论文提交情况',
+        },
         radar: {
-          // shape: 'circle',
-          indicator: indicator
+          indicator: indicator,
         },
         series: [{
           name: '',
@@ -65,6 +68,9 @@ export default {
                   formatter: function (params) {
                     return params.value;
                   },
+                  textStyle: {
+                    color: '#428BD4'
+                  }
                 },
               },
             },

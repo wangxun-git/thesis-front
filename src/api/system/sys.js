@@ -78,6 +78,14 @@ export default {
     })
   },
 
+  //分页获取faq信息
+  getFaq(index) {
+    return request({
+      url: '/faq/getFaq/' + index,
+      method: 'get'
+    })
+  },
+
   //获取全部faq信息
   getAllFaq() {
     return request({
@@ -117,5 +125,31 @@ export default {
       url: '/faq/getOneFaq/' + faqId,
       method: 'get',
     })
-  }
+  },
+
+  //获取论文模板信息
+  getThesisTemp() {
+    return request({
+      url: '/sys/getTemp',
+      method: 'get',
+    })
+  },
+
+  saveThesisTemp(sysSettings){
+    return request({
+      url: '/sys/saveThesisTemp',
+      method: 'post',
+      data: sysSettings
+    })
+  },
+
+  updateThesisTemp(sysSettings) {
+    return request({
+      url: '/sys/updateThesisTemp',
+      method: 'put',
+      data: sysSettings
+    })
+  },
+
 }
+

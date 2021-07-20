@@ -7,6 +7,6 @@ export default {
       url: '/home/getNotice/' +  noticeId,
       method: 'get',
     })
-  }
+  },
 
 }

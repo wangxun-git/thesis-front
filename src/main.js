@@ -20,6 +20,9 @@ import i18n from "@/lang";
 import '@/assets/iconfont/iconfont.css'  //引入阿里图标库
 import '@/assets/font/font.css'  //引入字体库
 
+import { hasBtnPermission } from './utils/permission' // button permission
+Vue.prototype.hasPerm = hasBtnPermission
+
 Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false

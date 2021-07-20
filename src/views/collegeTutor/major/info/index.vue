@@ -55,7 +55,7 @@
 
         <el-table-column prop="T_MAJOR_NAME" label="专业名称"></el-table-column>
 
-        <el-table-column prop="T_MAJOR_EN_NAME" label="专业英文名称"></el-table-column>
+        <el-table-column prop="T_MAJOR_EN_NAME" label="英文名称" :show-overflow-tooltip='true'></el-table-column>
 
         <el-table-column prop="T_COLLEGE_NAME" label="归属学院"></el-table-column>
 

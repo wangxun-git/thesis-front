@@ -217,7 +217,7 @@
         exportCollege() {
           this.collegeIdList = []
 
-          if (this.selectCollegeList.length == null ) {
+          if (this.selectCollegeList.length == null) {
             this.$message({
               type: 'error',
               "message": '请选择学院信息'

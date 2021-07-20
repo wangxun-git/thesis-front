@@ -5,9 +5,9 @@
       :default-active="$route.path"
       :collapse="isCollapse"
       mode="vertical"
-      background-color="#304156"
-      text-color="#bfcbd9"
-      active-text-color="#409EFF"
+      background-color="#5E5FF5"
+      text-color="#FEFEFF"
+      active-text-color="#66B1FF"
     >
       <sidebar-item v-for="route in routes" :key="route.path" :item="route" :base-path="route.path"/>
     </el-menu>
@@ -17,15 +17,18 @@
 <script>
 import { mapGetters } from 'vuex'
 import SidebarItem from './SidebarItem'
+import store from "../../../../store";
 
 export default {
   components: { SidebarItem },
   computed: {
     ...mapGetters([
-      'sidebar'
+      'sidebar',
+      'roles'
     ]),
     routes() {
-      return this.$router.options.routes
+      // return this.$router.options.routes
+      return store.getters.routes
     },
     isCollapse() {
       return !this.sidebar.opened
@@ -33,3 +36,7 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+</style>

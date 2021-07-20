@@ -30,6 +30,15 @@ export default {
       url: '/subject/deleteSub/' + subjectCode,
       method: 'delete'
     })
+  },
+
+  //学科导航页面论文查询
+  selectThesis(page, param) {
+    return request({
+      url: '/subject/getThesisXkdh/' + page,
+      method: 'post',
+      data: param,
+    })
   }
 
 }

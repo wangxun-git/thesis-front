@@ -37,15 +37,17 @@ const zh = {
   },
   index: {
     commit: "提交总数",
-    percentage: "待审核占比",
-    potentialInvestor: "待审核篇数",
-    intentionInvestor: "登录次数",
+    noApprPassNumber: "审核未通过篇数",
+    tutorApprNumber: "导师待审核篇数",
+    adminApprNumber: "研究生院待审核篇数",
+    catalogueNumber:"论文编目数",
+
+    loginTimes: "登录次数",
     waitExamineInvestor: "上次登录时间",
-    welcome: "欢迎用户",
+    welcome: "论文编目数",
     tenMillion: "Ten Million",
     person: "人",
     number: "篇",
-    loginTimes: '次',
     studentNumber: '学生人数'
   }
 };

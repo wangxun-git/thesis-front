@@ -71,7 +71,6 @@
 <script>
   import { ref, getCurrentInstance } from "vue";
   import { isvalidUsername } from "@/utils/loginValidator";
-  import {getRoles} from "../../api/role/role";
   //import { registerUser, registerRules } from "@/utils/registerValidator";
   // import RegisterForm from "@/components/RegisterForm.vue";
   export default {

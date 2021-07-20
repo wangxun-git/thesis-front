@@ -4,10 +4,10 @@
       <div class="head">
         <div class="logo"></div>
         <ul>
-          <li><a href="">首页</a></li>
-          <li><a>学科导航</a></li>
-          <li><a>中图法导航</a></li>
-          <li><a>FAQ</a></li>
+          <li><a href="/">首页</a></li>
+          <li><a @click="openXkdh()">学科导航</a></li>
+          <li><a @click="openClc()">中图法导航</a></li>
+          <li><a @click="reloadFaq()">FAQ</a></li>
         </ul>
       </div>
       <div class="timu">
@@ -19,6 +19,7 @@
 
       </div>
       <div class="newbtn">
+        <a class="file" v-html="noticeFileName" @click="downloadNotice()"></a>
         <a @click="reloadPreviosPage()">
           <span class="se">上</span>
           <span class="red">一篇&nbsp;&#58;&nbsp;</span><span v-html="previous"></span>
@@ -40,7 +41,7 @@
 <script>
 
   import { isvalidUsername } from "@/utils/loginValidator";
-  import noticeApi from '@/api/system/home.js'
+  import homeApi from '@/api/system/home'
   import noticePageApi from '@/api/home/notice'
 
   export default {
@@ -70,21 +71,8 @@
         previousId: '',
         next: '',
         nextId: '',
-        notices: [],
-        dialogFormVisible: false,
+        noticeFileName: '',
         noticeId: '',
-        user: {
-          T_USER_ID: "",
-          T_PASSWORD: ""
-        },
-        loginRules: {
-          T_USER_ID: [
-            { required: true, trigger: "blur", validator: validateUsername },
-          ],
-          T_PASSWORD: [
-            { required: true, trigger: "blur", validator: validatePass },
-          ],
-        },
         noticeList: null
       }
     },
@@ -102,13 +90,25 @@
     },
 
     mounted() {
-      //获取系统更新日志
-      this.getSysUpdLog()
-      //根据id获取通知信息
       this.getNoticeInfoById()
     },
 
     methods: {
+
+      openXkdh() {
+        let routeData = this.$router.resolve({ path: '/xkdh'});
+        window.open(routeData.href, '_blank');
+      },
+
+      openClc() {
+        let routeData = this.$router.resolve({ path: '/clc'});
+        window.open(routeData.href, '_blank');
+      },
+
+      reloadFaq() {
+        let routeData = this.$router.resolve({ path: '/faq'});
+        window.open(routeData.href, '_blank');
+      },
 
       init() {
         if (this.$route.query && this.$route.query.id) {
@@ -120,8 +120,6 @@
       //刷新本页面，访问其他通知
       reloadPreviosPage() {
         this.$router.push({ path: '/notice', query: {id: this.previousId} });
-        // this.init()
-        // this.getNoticeInfoById()
       },
 
       reloadNextPage() {
@@ -129,15 +127,8 @@
       },
 
       back() {
-        this.$router.go(-1)
-      },
-
-      getSysUpdLog() {
-        noticeApi.getAllNotice()
-          .then(result => {
-            const data = result.OUT_DATA.data
-            this.notices = data
-          })
+        let routeData = this.$router.resolve({ path: '/moreNotice'});
+        window.open(routeData.href, '_blank');
       },
 
       getNoticeInfoById() {
@@ -152,29 +143,33 @@
           this.previousId = this.noticeList.previous.T_NOTICE_ID
           this.next = this.noticeList.next.T_NOTICE_TITLE
           this.nextId = this.noticeList.next.T_NOTICE_ID
+          if (data.T_NOTICE_FILE != '' && data.T_NOTICE_FILE != null) {
+            this.noticeFileName = '通知文件: ' + data.T_NOTICE_FILE;
+          }
         })
       },
 
-      handleLogin() {
-        this.$refs.user.validate((valid) => {
-          if (valid) {
-            this.loading = true;
-            this.$store
-              .dispatch("Login", this.user)
-              .then(() => {
-                this.loading = false;
-                this.dialogFormVisible = false
-                this.$router.push({path: this.redirect || "/"});
-              })
-              .catch(() => {
-                this.loading = false;
-              });
-          } else {
-            alert("登录失败");
-            return false;
-          }
-        });
+      //下载通知文件
+      downloadNotice() {
+        homeApi.downloadFile(this.noticeId)  //文件导出
+          .then(result => {
+            if (!result) {
+              return
+            }
+            const link = document.createElement('a')
+            // let blob = new Blob([result], {type: 'application/vnd.ms-excel'})
+            let blob = new Blob([result])
+            link.style.display = 'none';
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download', this.noticeFileName)
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+          }).catch(error => {
+          console.error(error)
+        })
       }
+
     }
 
   }
@@ -199,6 +194,7 @@
     margin: 0 auto;
     background:url("../../assets/noticeImg/bg.png") no-repeat top;
   }
+
   .main{
     width: 1200px;
     margin: 0 auto;
@@ -236,6 +232,19 @@
     position: relative;
     margin-top: 88px;
   }
+
+  .fileTitle{
+    display: block;
+    /*padding-left: 24px;*/
+    padding-right: 5px;
+    position: absolute;
+    /*right: 30px;*/
+    left: 50rem;
+    bottom: 24px;
+    color: #605bf2;
+    font-size: 20px;
+  }
+
   .locat{
     display: block;
     padding-left: 24px;
@@ -245,8 +254,8 @@
     color: #605bf2;
     font-size: 20px;
     background: url("../../assets/noticeImg/locat.png") no-repeat 0;
-
   }
+
   .title{
     font-size: 20px;
     color: #000;
@@ -276,6 +285,10 @@
     margin-left: 60px;
     margin-top: 30px;
   }
+  .newbtn .file{
+    color: #04befe;
+  }
+
   .newbtn a{
     display: block;
     width: 100%;

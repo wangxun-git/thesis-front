@@ -35,10 +35,34 @@ export const constantRoutes = [
   },
 
   { //通知页面 :id
+    path: '/moreNotice',
+    name: '通知公告',
+    meta: {title: '通知公告'},
+    component: () => import('@/views/notice/moreNotice'),
+    hidden: true
+  },
+
+  { //通知页面 :id
     path: '/faq',
     name: 'FAQ',
     meta: {title: 'FAQ'},
     component: () => import('@/views/faq/index'),
+    hidden: true
+  },
+
+  {
+    path: '/clc',
+    name: '中图法导航',
+    meta: {title: 'FAQ'},
+    component: () => import('@/views/clc/index'),
+    hidden: true
+  },
+
+  {
+    path: '/xkdh',
+    name: '学科导航',
+    meta: {title: '学科导航'},
+    component: () => import('@/views/subjectNavi/index'),
     hidden: true
   },
 
@@ -56,11 +80,104 @@ export const constantRoutes = [
     }]
   },
 
+]
+
+export const asyncRoutes = [ // 通过路由元信息meta.roles来设置访问权限，一般来说是个数组
+
+  {
+    path: '/sysMana',
+    component: Layout,
+    redirect: '/sysMana/emailSys',
+    name: '系统管理',
+    meta: {title: '系统管理', icon: 'system'},
+    children: [
+      {
+        path: 'emailSys',
+        component: () => import('@/views/sysMana/emailSys'),
+        name: '邮箱管理',
+        meta: {title: '邮箱管理', icon: 'emailSys'},
+        nocache: true
+      },
+      {
+        path: 'noticeSys',
+        component: () => import('@/views/sysMana/noticeSys'),
+        name: '通知管理',
+        meta: {title: '通知管理', icon: 'noticeSys'},
+        nocache: true
+      },
+      {
+        path: 'faqSys',
+        component: () => import('@/views/sysMana/faqSys'),
+        name: 'FAQ管理',
+        meta: {title: 'FAQ管理', icon: 'FAQ'},
+        nocache: true
+      },
+      {
+        path: 'thesisTemp',
+        component: () => import('@/views/sysMana/thesisTemp'),
+        name: '论文模板',
+        meta: {title: '论文模板', icon: 'temp'},
+        nocache: true
+      },
+    ]
+  },
+
+  {
+    path: '/collegeTutor',
+    component: Layout,
+    redirect: '/collegeTutor/college',
+    name: '院系导师管理',
+    meta: {title: '院系导师管理', icon: 'college', roles: ['student'], alwaysShow: true},
+    children: [
+      {
+        path: 'college',
+        component: () => import('@/views/collegeTutor/college/index'),
+        name: '院系管理',
+        meta: {title: '院系管理', icon: 'college2', roles: ['student']},
+        children: [
+          {
+            path: 'info',
+            component: () => import('@/views/collegeTutor/college/info'),
+            name: '院系列表',
+            meta: {title: '院系列表', icon: 'table', noCache: true}
+          },
+          {
+            path: 'save',
+            component: () => import('@/views/collegeTutor/college/save'),
+            name: '院系添加',
+            meta: {title: '院系添加', icon: 'form'}
+          }
+        ]
+      },
+
+      {
+        path: 'major',
+        component: () => import('@/views/collegeTutor/major/index'),
+        name: '专业管理',
+        meta: {title: '专业管理', icon: 'major'},
+        children: [
+          {
+            path: 'info',
+            component: () => import('@/views/collegeTutor/major/info'),
+            name: '专业列表',
+            meta: {title: '专业列表', icon: 'table'}
+          },
+          {
+            path: 'save',
+            component: () => import('@/views/collegeTutor/major/save'),
+            name: '专业添加',
+            meta: {title: '专业添加', icon: 'form'}
+          }
+        ]
+      },
+    ]
+  },
+
   {
     path: '/userMana',
     component: Layout,
     redirect: '/userMana/user',
-    name: 'userMana',
+    name: '用户管理',
     meta: {title: '用户管理', icon: 'user'},
     children: [
       {
@@ -121,100 +238,29 @@ export const constantRoutes = [
             meta: {title: '学生修改', icon: 'form'},
             hidden: true
           },
-          {
-            path: 'approved',
-            name: '申请审批',
-            component: () => import('@/views/userMana/student/approval'),
-            meta: {title: '申请审批', icon: 'form'},
-            children: [
-              {
-                path: 'applyDoubleDeg',
-                name: '双学位申请审批',
-                component: () => import('@/views/userMana/student/approval/doubleDegree'),
-                meta: {title: '双学位申请审批', icon: 'form'},
-              },
-              {
-                path: 'applyResub',
-                name: '重新提交申请审批',
-                component: () => import('@/views/userMana/student/approval/reSubmit'),
-                meta: {title: '重新提交申请审批', icon: 'form'},
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-
-  {
-    path: '/collegeTutor',
-    component: Layout,
-    redirect: '/collegeTutor/college',
-    name: '院系导师管理',
-    meta: {title: '院系导师管理', icon: 'college', roles: ['student'], alwaysShow: true},
-    children: [
-      {
-        path: 'college',
-        component: () => import('@/views/collegeTutor/college/index'),
-        name: '院系管理',
-        meta: {title: '院系管理', icon: 'college2', roles: ['student']},
-        children: [
-          {
-            path: 'info',
-            component: () => import('@/views/collegeTutor/college/info'),
-            name: '院系列表',
-            meta: {title: '院系列表', icon: 'table', noCache: true}
-          },
-          {
-            path: 'save',
-            component: () => import('@/views/collegeTutor/college/save'),
-            name: '院系添加',
-            meta: {title: '院系添加', icon: 'form'}
-          }
-        ]
-      },
-
-      {
-        path: 'major',
-        component: () => import('@/views/collegeTutor/major/index'),
-        name: '专业管理',
-        meta: {title: '专业管理', icon: 'major'},
-        children: [
-          {
-            path: 'info',
-            component: () => import('@/views/collegeTutor/major/info'),
-            name: '专业列表',
-            meta: {title: '专业列表', icon: 'table'}
-          },
-          {
-            path: 'save',
-            component: () => import('@/views/collegeTutor/major/save'),
-            name: '专业添加',
-            meta: {title: '专业添加', icon: 'form'}
-          }
         ]
       },
       {
         path: 'tutor',
-        component: () => import('@/views/collegeTutor/major/index'),
+        component: () => import('@/views/userMana/tutor/index'),
         name: '导师管理',
         meta: {title: '导师管理', icon: 'tutor'},
         children: [
           {
             path: 'info',
-            component: () => import('@/views/collegeTutor/tutor/info'),
+            component: () => import('@/views/userMana/tutor/info'),
             name: '导师列表',
             meta: {title: '导师列表', icon: 'table'}
           },
           {
             path: 'save',
-            component: () => import('@/views/collegeTutor/tutor/save'),
+            component: () => import('@/views/userMana/tutor/save'),
             name: '导师添加',
             meta: {title: '导师添加', icon: 'form'}
           },
           {
             path: 'edit/:id',
-            component: () => import('@/views/collegeTutor/tutor/save'),
+            component: () => import('@/views/userMana/tutor/save'),
             name: '导师修改',
             meta: {title: '导师修改', icon: 'form'},
             hidden : true
@@ -350,91 +396,55 @@ export const constantRoutes = [
   },
 
   {
-    path: '/systemMana',
+    path: '/auth',
     component: Layout,
-    redirect: '/sysMana/emailSys',
-    name: '系统管理',
-    meta: {title: '系统管理', icon: 'system', roles: ['admin'], requireAuth: true},
+    name: '权限管理',
+    meta: {title: '权限管理', icon: 'auth'},
     children: [
       {
-        path: 'emailSys',
-        component: () => import('@/views/sysMana/emailSys'),
-        name: '邮箱管理',
-        meta: {title: '邮箱管理', icon: 'emailSys'},
-        nocache: true
+        path: 'info',
+        component: () => import('@/views/auth/info'),
+        name: '权限列表',
+        meta: {title: '权限列表', icon: 'table'}
+      }
+    ]
+  },
+
+  {
+    path: '/userInfo',
+    name: '用户信息',
+    component: Layout,
+    meta: {title: '用户信息', icon: 'form'},
+    hidden: true,
+    children: [
+      {
+        path: 'user',
+        component: () => import('@/views/userInfo/index'),
+        name: '个人中心',
+        meta: {title: '个人中心', icon: 'form'},
+        hidden: true
       },
       {
-        path: 'noticeSys',
-        component: () => import('@/views/sysMana/noticeSys'),
-        name: '通知管理',
-        meta: {title: '通知管理', icon: 'noticeSys'},
-        nocache: true
-      },
-      {
-        path: 'faqSys',
-        component: () => import('@/views/sysMana/faqSys'),
-        name: 'FAQ管理',
-        meta: {title: 'FAQ管理', icon: 'FAQ'},
-        nocache: true
+        path: 'student',
+        component: () => import('@/views/userInfo/student'),
+        name: '个人中心',
+        meta: {title: '个人中心', icon: 'form'},
+        hidden: true
       }
     ]
   },
 
   { path: '*', redirect: '/404', hidden: true }
+
 ]
 
-export default new Router({
-  // mode: 'history', //后端支持可开
+const createRouter = () => new Router({
+  mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })
 
-export const asyncRoutes = [ // 通过路由元信息meta.roles来设置访问权限，一般来说是个数组
+const router = createRouter()
 
-  {
-    path: '/systemMana',
-    component: Layout,
-    redirect: '/sysMana/emailSys',
-    name: '系统管理',
-    meta: {title: '系统管理', icon: 'system', roles: ['admin'], requireAuth: true},
-    children: [
-      {
-        path: 'emailSys',
-        component: () => import('@/views/sysMana/emailSys'),
-        name: '邮箱管理',
-        meta: {title: '邮箱管理', icon: 'emailSys'},
-        nocache: true
-      },
-      {
-        path: 'noticeSys',
-        component: () => import('@/views/sysMana/noticeSys'),
-        name: '通知管理',
-        meta: {title: '通知管理', icon: 'noticeSys'},
-        nocache: true
-      },
-      {
-        path: 'faqSys',
-        component: () => import('@/views/sysMana/faqSys'),
-        name: 'FAQ管理',
-        meta: {title: 'FAQ管理', icon: 'FAQ'},
-        nocache: true
-      }
-    ]
-  },
-
-
-  // {
-  //   path: '/permission',
-  //   component: Layout,
-  //   redirect: '/permission/page',
-  //   alwaysShow: true, // will always show the root menu
-  //   name: 'Permission',
-  //   meta: {
-  //     title: 'Permission',
-  //     icon: 'lock',
-  //     roles: ['admin', 'editor'] // 通过roles设置路由的权限
-  //   },
-  //   // ...
-  // }
-]
+export default router
 

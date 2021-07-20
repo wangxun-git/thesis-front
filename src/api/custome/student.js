@@ -56,6 +56,23 @@ export default {
       method: 'put',
       data: student
     })
+  },
+
+  //
+  getStudentById(stuId) {
+    return request({
+      url: '/student/getStu/' + stuId,
+      method: 'get',
+    })
+  },
+
+  //个人中心修改用户信息
+  updatePerson(student) {
+    return request({
+      url: '/student/updatePersonInfo',
+      method: 'post',
+      data: student
+    })
   }
 }
 

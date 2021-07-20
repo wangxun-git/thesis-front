@@ -1,6 +1,14 @@
 import request from '@/utils/request'
 
 export default {
+
+  getNoticeByPage(page) {
+    return request({
+      url: '/home/getPageNotice/' + page,
+      method: 'get',
+    })
+  },
+
   getAllNotice() {
     return request({
       url: '/home/getNotices',
@@ -37,6 +45,14 @@ export default {
     })
   },
 
+  //获取提交、未提交
+  getSubmitStu() {
+    return request({
+      url: '/home/getSubmitStus',
+      method: 'get',
+    })
+  },
+
   getThesisByCollege() {
     return request({
       url: '/home/getCollegeThesis',
@@ -51,9 +67,18 @@ export default {
     })
   },
 
+  //获取论文提交时间线
   getThesisTimeLine() {
     return request({
       url: '/home/getThesisTimeLine',
+      method: 'get',
+    })
+  },
+
+  //获取登录学生的论文状态
+  getThesisStatusByToken() {
+    return request({
+      url: '/home/getThesisStatus',
       method: 'get',
     })
   },
@@ -71,6 +96,14 @@ export default {
       url: '/sys/updatePwd',
       method: 'post',
       data: user
+    })
+  },
+
+  downloadThesisTemp() {
+    return request({
+      url: '/home/downloadThesisTemp',
+      method: 'get',
+      responseType: 'blob'
     })
   }
 

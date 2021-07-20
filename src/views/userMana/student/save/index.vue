@@ -70,10 +70,10 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="双学位">
-        <el-radio v-model="doubleDegree" label="1" @change="handlerDegreeChange()">是</el-radio>
-        <el-radio v-model="doubleDegree" label="0" @change="handlerDegreeChange()">否</el-radio>
-      </el-form-item>
+<!--      <el-form-item label="双学位">-->
+<!--        <el-radio v-model="doubleDegree" label="1" @change="handlerDegreeChange()">是</el-radio>-->
+<!--        <el-radio v-model="doubleDegree" label="0" @change="handlerDegreeChange()">否</el-radio>-->
+<!--      </el-form-item>-->
 
       <el-form-item>
         <el-button type="success" @click="saveStudentInfo">保存</el-button>

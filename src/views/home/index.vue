@@ -9,18 +9,18 @@
         </div>
         <div class="fr">
           <nav class="item-bar">
-            <a href="">首 页</a>
-            <a href="#">学科导航</a>
-            <a href="#">中图法导航</a>
-            <a href="#" @click="openFaqPage">FAQ</a>
+            <a href="/">首 页</a>
+            <a @click="openxkdh()">学科导航</a>
+            <a @click="openClcPage">中图法导航</a>
+            <a @click="openFaqPage">FAQ</a>
             <el-button class="btn" id="btnAddCate" @click="dialogFormVisible = true">登 录</el-button>
           </nav>
         </div>
       </div>
     </header>
 
-        <el-dialog title="系统登录" :visible.sync="dialogFormVisible" center width="30%"
-                customClass="dialog-title">
+    <el-dialog title="系统登录" :visible.sync="dialogFormVisible" center width="30%"
+               customClass="dialog-title">
       <el-form
         ref="user"
         :rules="loginRules"
@@ -65,7 +65,7 @@
                   <a href="#" @click="openNotice(key.T_NOTICE_ID)"><p><i class="el-icon-caret-right"></i> {{key.T_NOTICE_TITLE}}</p><span>{{key.T_OUT_TIME}}</span></a>
                 </li>
               </ul>
-              <div class="more"><a href="#" v-if="notices.length > 5">MORE...</a></div>
+              <div class="more"><a href="#" v-if="notices.length > 5" @click="openMoreNotice">MORE...</a></div>
             </div>
           </div>
 
@@ -73,8 +73,10 @@
             <img src="@/assets/images/computer.png" alt="">
             <div class="navigate">
               <ul>
-                <li v-for="(key,value) in subjects"><a href="#" @click="openSubject(key.T_SUBJECT_CODE)">
-                  <p>{{key.T_SUBJECT_NAME}}</p></a>
+                <li v-for="(key,value) in subjects">
+                  <a href="#" @click="openSubject(key.T_SUBJECT_CODE)">
+                    <p>{{key.T_SUBJECT_NAME}}</p>
+                  </a>
                 </li>
               </ul>
               <div class="search">
@@ -227,11 +229,22 @@
 
     methods: {
 
+      //打开学科导航页面
+      openxkdh() {
+        let routeData = this.$router.resolve({ path: '/xkdh'});
+        window.open(routeData.href, '_blank');
+      },
+
       //打开系统通知页面
       openNotice(noticeId) {
         let routeData = this.$router.resolve({ path: '/notice', query: {id: noticeId} });
         window.open(routeData.href, '_blank');
-        // this.$router.push({path: '/notice', query: {id: noticeId}})
+      },
+
+      //打开通知公告页面
+      openMoreNotice() {
+        let routeData = this.$router.resolve({ path: '/moreNotice' });
+        window.open(routeData.href, '_blank');
       },
 
       //打开faq页面
@@ -240,11 +253,10 @@
         window.open(routeData.href, '_blank');
       },
 
-      keyDownSearch(event) {
-        var evt = window.event || event;
-        if (evt.keyCode == 13) {
-          this.openThesis()
-        }
+      //打开中图法导航页面
+      openClcPage() {
+        let routeData = this.$router.resolve({ path: '/clc'});
+        window.open(routeData.href, '_blank');
       },
 
       //打开论文搜索页面
@@ -257,12 +269,14 @@
           })
           return
         }
-        console.log(data.value)
+        let routeData = this.$router.resolve({ path: '/xkdh', query: {name: data.value}});
+        window.open(routeData.href, '_blank');
       },
 
       //打开学科检索页面
       openSubject(subjectCode) {
-        console.log(subjectCode)
+        let routeData = this.$router.resolve({ path: '/xkdh', query: {id: subjectCode}});
+        window.open(routeData.href, '_blank');
       },
 
       getSubject() {
@@ -336,19 +350,19 @@
           return
         }
         homeApi.updatePwd(this.userForget)
-        .then(result => {
-          const code = result.RETURN_CODE
-          if (code !== 10000) {
-            return
-          }else {
-            this.$message({
-              type: "success",
-              message: "修改成功"
-            })
-            this.dialogFormVisible = true
-            this.dialogForgetVisible = false
-          }
-        })
+          .then(result => {
+            const code = result.RETURN_CODE
+            if (code !== 10000) {
+              return
+            }else {
+              this.$message({
+                type: "success",
+                message: "修改成功"
+              })
+              this.dialogFormVisible = true
+              this.dialogForgetVisible = false
+            }
+          })
       },
 
       back() {
@@ -359,50 +373,53 @@
       //获取验证码
       getCaptchaInfo() {
         homeApi.getCaptcha(this.userForget.T_USER_ID, this.userForget.T_EMAIL)
-        .then(result => {
-          this.$message({
-            type: "success",
-            message: "发送成功,请注意查收"
+          .then(result => {
+            this.$message({
+              type: "success",
+              message: "发送成功,请注意查收"
+            })
+            this.btnCap = true
+            this.showPwd = true
+            setTimeout(this.changeBtnCap, 60000)
           })
-          this.btnCap = true
-          this.showPwd = true
-          setTimeout(this.changeBtnCap, 60000)
-        })
       },
 
       changeBtnCap() {
         this.btnCap = false
       },
 
-      // showPwd() {
-      //   if (this.pwdType === "password") {
-      //     this.pwdType = "";
-      //   } else {
-      //     this.pwdType = "password";
-      //   }
-      // },
       handleLogin() {
+        const loading = this.$loading({
+          lock: true,
+          text: '页面装填中......',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
         this.$refs.user.validate((valid) => {
           if (valid) {
             this.loading = true;
             this.$store
               .dispatch("Login", this.user)
               .then(() => {
-                this.loading = false;
+                loading.close();
                 this.dialogFormVisible = false
                 this.$router.push({path: this.redirect || "/"});
               })
               .catch(() => {
+                loading.close();
                 this.loading = false;
               });
           } else {
-            alert("登录失败");
+            this.$message({
+              type: "error",
+              message: "登录失败"
+            })
+            loading.close();
             return false;
           }
         });
       }
     }
-
   }
 </script>
 
@@ -448,7 +465,6 @@
     outline: none; border:none;
     text-decoration: none;
     /* 首字母显示为大写 */
-    /* text-transform: capitalize; */
     transition:all .2s linear;
   }
 
@@ -461,12 +477,12 @@
     width: 40%;
   }
 
-  /*body,html{*/
-  /*  height: 100%;*/
-  /*  width:100%;*/
-  /*  margin:0 0 0 0;*/
-  /*  overflow:hidden hidden;*/
-  /*}*/
+  /* body,html{
+   height: 100%;
+   width:100%;
+   margin:0 0 0 0;
+   overflow:hidden hidden;
+  } */
 
   html {
     font-size: 62.5%;
@@ -474,21 +490,28 @@
     scroll-padding-top: 6rem;
   }
 
+
+  * {margin: 0;padding: 0;}
+  .clearfix {clear: both;}
+
   .body {
     background-image:url(../../assets/images/bg.png);
-    background-position: center center;
+    height: 100%;
+    /* background-position: center center; */
     background-repeat: no-repeat;
     /* 当内容高度大于图片高度时，背景图像的位置相对于viewport固定 */
     background-attachment: fixed;
     /* 让背景图基于容器大小伸缩 */
-    background-size: cover;
+    /* background-size: cover; */
     /* 设置背景颜色，背景图加载过程中会显示背景色 */
     background-color: #CCC;
   }
 
   .w {
-    width: 1200px;
-    height: 400px;
+    width: 120rem;
+    height: 50rem;
+    /*width: 1200px;*/
+    /*height: 500px;*/
     margin: 0 auto;
     /*margin-left: 0px;*/
     /*margin-right: 0px;*/
@@ -502,8 +525,7 @@
     height: 115px;
   }
   .logo {
-    position: absolute;
-    top: 58px;
+    padding-top: 58px;
     width: 243px;
     height: 37px;
   }
@@ -578,8 +600,9 @@
     padding-top: 105px;
     width: 390px;
     /* margin-left:360px; */
-    display: inline-block;
+    /* display: inline-block; */
     position: relative;
+    float: left;
   }
 
   section .left-sidebar .notice ul li {
@@ -611,24 +634,26 @@
     color: #ff3838;
   }
 
-  .positon{
-    display: inline-block;
-    position: relative;
-  }
-
   .right-sidebar {
-    position: absolute;
-    right: 15rem;
-    top: 20rem;
-    width: 843px;
+    /*position: absolute;*/
+    /*right: 0.01rem;*/
+    /*top: 10rem;*/
+    float: left;
+    max-width: 800px;
+    padding-top: 10rem;
+    padding-left: 5rem;
+    position: relative;
   }
 
   .right-sidebar .navigate {
     position: absolute;
+    /*top: 350px;*/
+    top: 30rem;
+    left: 20rem;
     height: 100px;
     width: 500px;
-    top: 17rem;
-    left: 14rem;
+    /* top: 17rem;
+    left: 14rem; */
   }
 
   .right-sidebar .navigate ul li {
@@ -678,40 +703,34 @@
   }
 
   footer {
-    padding-top: 10rem;
-    position: relative;
+    /* padding-top: 10rem; */
+    /* position: relative; */
   }
   footer .pic {
-    position: relative;
-    width: 40%;
-    top: -5rem;
-    left: -20rem;
+    float: left;
+    margin-top: -160px;
+    margin-left: -180px;
   }
-
 
   footer p {
-    position: absolute;
-    left: 35%;
-    bottom: 12rem;
-
+    margin-top: -15rem;
+    margin-left: 55rem;
     color: #d7d7d7;
     font-size: 1.4rem;
-
   }
 
-  @media(max-width:1439px) {
-    .right-sidebar {
-      display: none;
-    }
-  }
 </style>
 
 <style scoped>
-  body,html{
+  html{
     height: 100%;
     width:100%;
-    margin:0 0 0 0;
+    margin:0 auto;
     overflow:hidden hidden;
+  }
+  .body {
+    overflow:visible;
+    overflow-y:hidden;
   }
 </style>
 

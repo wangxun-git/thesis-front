@@ -7,7 +7,7 @@
       </el-form-item>
 
       <el-form-item label="用户名称">
-        <el-input v-model="user.T_USERNAME" disabled></el-input>
+        <el-input v-model="user.T_USERNAME"></el-input>
       </el-form-item>
 
       <el-form-item label="手机号码">
@@ -33,15 +33,31 @@
 
       </el-form-item>
 
-      <el-form-item label="用户权限">
-        <el-select v-model="roleId" clearable :placeholder="rolename" :blur="handlerUpdateRole()">
+      <el-form-item label="用户身份">
+        <el-select v-model="user.T_USER_IDENTITY" clearable placeholder="请选择身份信息">
           <el-option
-            v-for="item in rolelist"
-            :key="item.T_ROLE_ID"
-            :label="item.T_ROLE_NAME"
-            :value="item.T_ROLE_ID">
+            v-for="item in idenList"
+            :key="item.key"
+            :label="item.value"
+            :value="item.key">
           </el-option>
         </el-select>
+      </el-form-item>
+
+      <el-form-item label="用户密码">
+        <el-input :type="pwdType" v-model="user.T_PASSWORD" clearable></el-input>
+      </el-form-item>
+
+      <el-form-item label="确认密码">
+        <el-tooltip class="item" effect="light" :content="contentAgainPwd" placement="top" :popper-class="tooltipPwd">
+          <el-input
+            :type="pwdType"
+            v-model="T_AGAIN_PWD"
+            clearable
+            :change="checkPwd()"
+            :suffix-icon="iconAgainPwd">
+          </el-input>
+        </el-tooltip>
       </el-form-item>
 
       <el-form-item>
@@ -54,7 +70,7 @@
 
 <script>
   import user from '@/api/custome/user.js'
-  import {getRoles} from '@/api/role/role.js'
+  import roleApi from '@/api/role/role'
   import sys from "@/api/system/sys";
   import { getToken } from '@/utils/auth'
   import ImageCropper from '@/components/ImageCropper'
@@ -74,21 +90,31 @@
           T_PHOTO: '',
           T_ROLE_ID: ''
         },
-        rolelist: {},
+        T_AGAIN_PWD: '',
         pwdType: 'password',
         BASE_API: process.env.BASE_API, // 接口API地址
         headers: {token: getToken()},
-        roleId: '',
-        rolename: '',
         avatar: '',  //头像
-        photo: ''  //图片地址
+        photo: '',  //图片地址
+        contentAgainPwd: '密码不一致',
+        tooltipPwd: 'tooltip-false-pwd',
+        iconAgainPwd: 'iconfont icon-true',
+        idenList: [
+          {
+            key: 0,
+            value: '研究院管理员'
+          },
+          {
+            key: 3,
+            value: '图书馆管理员'
+          },
+        ]
       }
     },
 
     created() {
       this.init()
       this.getUserInfo()  //初始化用户信息
-      this.getRoleInfo()  //获取权限信息
     },
 
     methods: {
@@ -102,19 +128,12 @@
       //获取用户信息
       getUserInfo() {
         user.getUserInfoById(this.user.T_USER_ID)
-        .then(response => {
-          this.user = response.OUT_DATA.data
-          this.photo = response.OUT_DATA.data.T_PHOTO
-          this.avatar = this.BASE_API + '/avatar/' + response.OUT_DATA.data.T_PHOTO
-          //显示权限信息
-          this.rolename = response.OUT_DATA.data.T_ROLE.T_ROLE_NAME
-        })
-      },
-
-      //获取权限信息
-      getRoleInfo() {
-        getRoles().then(response => {
-          this.rolelist = response.OUT_DATA.data
+        .then(result => {
+          this.user = result.OUT_DATA.data
+          console.log(this.user)
+          this.photo = result.OUT_DATA.data.T_PHOTO
+          this.T_AGAIN_PWD = this.user.T_PASSWORD
+          this.avatar = this.BASE_API + '/avatar/' + result.OUT_DATA.data.T_PHOTO
         })
       },
 
@@ -129,7 +148,6 @@
           .then( result => {
             //删除用户头像存储信息
             this.user.T_PHOTO = this.photo
-
             //返回用户头像
             this.avatar = this.BASE_API + '/avatar/' + this.photo
           })
@@ -143,13 +161,34 @@
         this.avatar = this.BASE_API + '/avatar/' + data.OUT_DATA.data
       },
 
-      //下拉框选择
-      handlerUpdateRole() {
-        this.user.T_ROLE_ID = this.roleId
+      checkPwd() {
+        if (this.user.T_PASSWORD == '') {
+          this.iconAgainPwd = 'iconfont icon-false'
+          this.tooltipPwd = 'tooltip-false-pwd'
+          this.contentAgainPwd = '请输入密码'
+        }else if (this.T_AGAIN_PWD != this.user.T_PASSWORD) {
+          this.iconAgainPwd = 'iconfont icon-false'
+          this.tooltipPwd = 'tooltip-false-pwd'
+          this.contentAgainPwd = '密码不一致'
+        }else {
+          this.iconAgainPwd = 'iconfont icon-true'
+          this.tooltipPwd = 'tooltip-true-pwd'
+          this.contentAgainPwd = '密码一致'
+        }
       },
 
       //保存更新内容
       upadteUserInfo(){
+        //校验密码
+        //校验密码
+        if (this.T_AGAIN_PWD != this.user.T_PASSWORD) {
+          this.$message({
+            type: "error",
+            message: "密码不一致,请确认"
+          })
+          return
+        }
+
         user.updateUserInfo(this.user)
         .then(response => {
           this.$message({

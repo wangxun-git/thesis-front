@@ -115,7 +115,7 @@
       },
 
       created() {
-          //获取导师职称
+        //获取导师职称
         this.getStuTypeInfo()
         this.getTuTorInfo()
       },
@@ -229,7 +229,7 @@
         },
 
         editTutorInfo(tutorId) {
-          this.$router.push({path: '/collegeTutor/tutor/edit/' + tutorId})
+          this.$router.push({path: '/userMana/tutor/edit/' + tutorId})
         }
 
       }

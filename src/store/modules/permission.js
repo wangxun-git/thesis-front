@@ -1,17 +1,19 @@
-import { constantRoutes } from '@/router/index'
+import { constantRoutes } from '@/router'
 import { getMenu } from '@/api/login'
 import Layout from '@/views/layout/Layout'
+import { getToken } from '@/utils/auth'
 
 function filterAsyncRouter(asyncRouterMap) { // 遍历后台传来的路由字符串，转换为组件对象
   try {
     const accessedRouters = asyncRouterMap.filter(route => {
+
       if (route.component) {
         if (route.component === 'Layout') { // Layout组件特殊处理
           route.component = Layout
         } else {
           const component = route.component
           route.component = resolve => {
-            require(['@/views' + component + '.vue'], resolve)
+            require(['@/views' + component], resolve)
           }
         }
       }
@@ -41,14 +43,12 @@ const mutations = {
 const actions = {
   async generateRoutes({ commit }, roles) {
     // 取后台路由
-    const asyncRouter = await getMenu()
-    console.log('-------')
+    const asyncRouter = await getMenu(getToken())
 
     return new Promise(resolve => {
       // const tmp = asyncRouter.data.permissionList
       const tmp = asyncRouter.OUT_DATA.data
       const accessedRoutes = filterAsyncRouter(tmp)
-      console.log('-------')
 
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)

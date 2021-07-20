@@ -14,8 +14,13 @@
           </el-dropdown-item>
         </router-link>
         <el-dropdown-item divided>
+          <span style="display:block;" @click="openPersonCenter()">
+            {{name}}
+          </span>
+        </el-dropdown-item>
+        <el-dropdown-item divided>
           <span style="display:block;" @click="logout"
-                v-loading.fullscreen.lock="fullscreenLoading">退出</span>
+                >退出</span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -26,6 +31,7 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import role from "../../../api/role/role";
 
 export default {
   components: {
@@ -35,27 +41,44 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'name',
+      'roles',
     ])
   },
 
   data() {
     return {
       BASE_API: process.env.BASE_API,
-      fullscreenLoading: false
     }
   },
-
 
   methods: {
     toggleSideBar() {
       this.$store.dispatch('ToggleSideBar')
     },
     logout() {
-      this.fullscreenLoading = true
+      // this.fullscreenLoading = true
+      const loading = this.$loading({
+        lock: true,
+        text: '用户退出中......',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
       this.$store.dispatch('LogOut').then(() => {
+        loading.close();
         location.reload() // 为了重新实例化vue-router对象 避免bug
       })
+    },
+
+    //打开个人中心
+    openPersonCenter() {
+      const roleCode = this.$store.state.user.roles
+      if ('student' == roleCode) {
+        this.$router.push({path: '/userInfo/student'})
+      }else {
+        this.$router.push({path: '/userInfo/user'})
+      }
     }
   }
 }
