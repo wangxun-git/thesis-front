@@ -58,7 +58,6 @@ export default {
       this.$store.dispatch('ToggleSideBar')
     },
     logout() {
-      // this.fullscreenLoading = true
       const loading = this.$loading({
         lock: true,
         text: '用户退出中......',
@@ -73,12 +72,12 @@ export default {
 
     //打开个人中心
     openPersonCenter() {
-      const roleCode = this.$store.state.user.roles
-      if ('student' == roleCode) {
-        this.$router.push({path: '/userInfo/student'})
-      }else {
-        this.$router.push({path: '/userInfo/user'})
-      }
+      // const roleCode = this.$store.state.user.roles
+      // if ('student' == roleCode) {
+      //   this.$router.push({path: '/userInfo/student'})
+      // }else {
+      this.$router.push({path: '/userInfo/user'})
+      // }
     }
   }
 }

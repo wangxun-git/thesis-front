@@ -5,7 +5,7 @@
     <el-form>
 
       <el-form-item label="学号" :label-width="formWidth">
-        <el-input v-model="thesis.T_STU_ID" class="input-width" :disabled="editThesis"/>
+        <el-input v-model="thesis.T_STU_ID" class="input-width" clearable :disabled="editThesis"/>
       </el-form-item>
 
       <el-form-item label="学院名称" :label-width="formWidth">

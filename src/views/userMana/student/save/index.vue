@@ -20,7 +20,7 @@
       </el-form-item>
 
       <el-form-item label="归属学院">
-        <el-select v-model="collegeId" clearable placeholder="请选择学院名称" @change="handlerCollegeChange()">
+        <el-select v-model="student.T_COLLEGE_ID" clearable placeholder="请选择学院名称" @change="handlerCollegeChange()">
           <el-option
             v-for="item in collegelist"
             :key="item.T_COLLEGE_ID"
@@ -31,7 +31,7 @@
       </el-form-item>
 
       <el-form-item label="归属专业">
-        <el-select v-model="majorId" clearable placeholder="请选择专业名称" @change="handlerMajorChange()">
+        <el-select v-model="student.T_MAJOR_ID" clearable placeholder="请选择专业名称">
           <el-option
             v-for="item in majorlist"
             :key="item.T_MAJOR_ID"
@@ -96,9 +96,7 @@
           return {
             student: {},
             collegelist: {},
-            collegeId: '',
             majorlist: {},
-            majorId: '',
             major: {},
             levellist: {},
             doubleDegree: '',
@@ -138,15 +136,18 @@
           stuDegreeApi.getStuDegreeByCond(this.page, this.stuDegree)
           .then(result => {
             const data = result.OUT_DATA.data
-            this.degreeList = data.data
-            this.student.T_STU_DEGREE_ID = this.degreeList[0].T_STU_DEGREE_ID
+            if (data == null) {
+              this.degreeList = {}
+            }else {
+              this.degreeList = data.data
+              this.student.T_STU_DEGREE_ID = this.degreeList[0].T_STU_DEGREE_ID
+            }
           })
         },
 
         //选择学院之后，专业选择框发生改变
         handlerCollegeChange() {
-          this.major.T_COLLEGE_ID = this.collegeId
-          this.student.T_COLLEGE_ID = this.collegeId
+          this.major.T_COLLEGE_ID = this.student.T_COLLEGE_ID
           majorApi.getMajorInfoByCond(this.major)
             .then(result => {
               this.majorId = ''
@@ -154,22 +155,28 @@
             })
         },
 
-        handlerMajorChange() {
-          this.student.T_MAJOR_ID = this.majorId
-        },
-
-        handlerDegreeChange() {
-          this.student.T_MORE_DEGREE = this.doubleDegree
+        // handlerDegreeChange() {
+        //   this.student.T_MORE_DEGREE = this.doubleDegree
+        // },
+        checkYear() {
+          if (this.student.T_EN_YEAR >= this.student.T_GRA_YEAR) {
+            this.$message({
+              type: "error",
+              message: "入学年份[" + this.student.T_EN_YEAR +"]大于毕业年份[" + this.student.T_GRA_YEAR + "]"
+            })
+            return true
+          }
+          return false
         },
 
         saveStudentInfo() {
+          //校验入学年份、毕业年份
+          if (this.checkYear()) {
+            return
+          }
           studentApi.saveStudentInfo(this.student)
           .then(result => {
             this.student = {}
-            this.collegeId = ''
-            this.majorId = ''
-            this.level = ''
-            this.doubleDegree = ''
             this.$message({
               type: "success",
               message: "添加成功"

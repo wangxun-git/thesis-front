@@ -5,6 +5,7 @@ import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
+import zhlocale from 'element-ui/lib/locale/lang/zh-CN'
 
 import '@/styles/index.scss' // global css
 
@@ -23,7 +24,7 @@ import '@/assets/font/font.css'  //引入字体库
 import { hasBtnPermission } from './utils/permission' // button permission
 Vue.prototype.hasPerm = hasBtnPermission
 
-Vue.use(ElementUI, { locale })
+Vue.use(ElementUI, { zhlocale })
 
 Vue.config.productionTip = false
 

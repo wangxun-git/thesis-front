@@ -127,13 +127,13 @@ export const asyncRoutes = [ // 通过路由元信息meta.roles来设置访问�
     component: Layout,
     redirect: '/collegeTutor/college',
     name: '院系导师管理',
-    meta: {title: '院系导师管理', icon: 'college', roles: ['student'], alwaysShow: true},
+    meta: {title: '院系导师管理', icon: 'college'},
     children: [
       {
         path: 'college',
         component: () => import('@/views/collegeTutor/college/index'),
         name: '院系管理',
-        meta: {title: '院系管理', icon: 'college2', roles: ['student']},
+        meta: {title: '院系管理', icon: 'college2'},
         children: [
           {
             path: 'info',

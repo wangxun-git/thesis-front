@@ -5,8 +5,9 @@
     <!-- 学生页面 -->
     <studentVue v-if="roles == 'student'"></studentVue>
 
-    <!-- 导师页面 -->
-    <tutor-vue v-if="roles == 'tutor' || roles == 'admin' || roles == 'library-admin'"></tutor-vue>
+    <!-- 解决学生端退出显示左侧导航菜单问题 -->
+    <!-- 导师、研究院管理员、图书馆管理员页面 -->
+    <tutor-vue v-if="roles == 'admin' || roles == 'tutor' || roles == 'library-admin'"></tutor-vue>
 
   </div>
 
@@ -18,10 +19,6 @@
   import tutorVue from '../dashboard/components/tutor'
 
   export default {
-    data() {
-      return {
-      };
-    },
     computed: {
       ...mapGetters([
         'name',

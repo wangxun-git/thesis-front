@@ -49,7 +49,6 @@
                           </p>
                         </div>
                         <div class="rightItem">
-                          <icon-svg icon-class="iconpay2" />
                         </div>
                       </div>
                     </el-col>
@@ -62,7 +61,6 @@
                           </p>
                         </div>
                         <div class="rightItem">
-                          <icon-svg icon-class="iconpay1" />
                         </div>
                       </div>
                     </el-col>
@@ -75,7 +73,6 @@
                           </p>
                         </div>
                         <div class="rightItem">
-                          <icon-svg icon-class="iconpay" />
                         </div>
                       </div>
                     </el-col>
@@ -88,7 +85,6 @@
                           </p>
                         </div>
                         <div class="rightItem">
-                          <icon-svg icon-class="iconfufei0" />
                         </div>
                       </div>
                     </el-col>
@@ -219,9 +215,11 @@
           let status5 = data.status5 == null ? 0 : data.status5
           let status6 = data.status6 == null ? 0 : data.status6
           let status7 = data.status7 == null ? 0 : data.status7
-          this.tutorAppr =  (status1 + status3 + status4 + status5 + status6 + status7)
-          this.adminAppr = status3 + status4 + status6
-          this.noApprPass = status2 + status5
+          // this.tutorAppr =  status0 + status1 + status3 + status4 + status5 + status6 + status7
+          this.tutorAppr =  status0
+          // this.adminAppr = status3 + status4 + status6
+          this.adminAppr = status5
+          this.noApprPass = status2 + status7
           this.catalogue = status4
           //初始化环形图
           this.initStatusCharts(data)

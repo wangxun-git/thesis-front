@@ -2,6 +2,13 @@ import request from '@/utils/request'
 
 export default {
 
+  getAllSub() {
+    return request({
+      url: '/subject/getAllSub',
+      method: 'get'
+    })
+  },
+
   getSubjectByLevel(level){
     return request({
       url: '/subject/getSubList/' + level,

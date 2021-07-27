@@ -87,6 +87,23 @@ export default {
     })
   },
 
+  //
+  getThesisColl(thesisColl) {
+    return request({
+      url: '/thesisColl/getThesisColl',
+      method: 'post',
+      data: thesisColl
+    })
+  },
+
+  updateThesisColl(thesisColl) {
+    return request({
+      url: '/thesisColl/updateThesisColl',
+      method: 'post',
+      data: thesisColl
+    })
+  },
+
   //删除论文文件
   removeThesisFile(fileUrl){
     return request({

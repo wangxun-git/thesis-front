@@ -7,8 +7,7 @@
       mode="vertical"
       background-color="#5E5FF5"
       text-color="#FEFEFF"
-      active-text-color="#66B1FF"
-    >
+      active-text-color="#66B1FF">
       <sidebar-item v-for="route in routes" :key="route.path" :item="route" :base-path="route.path"/>
     </el-menu>
   </el-scrollbar>

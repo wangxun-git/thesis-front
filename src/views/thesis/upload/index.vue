@@ -1,145 +1,199 @@
 <template>
-    <div class="app-container">
-      <router-view/>
+  <div class="app-container">
+    <router-view/>
+    <div class="content">
+      <div class="main clearfix">
+        <!-- 头部区域 -->
+        <div class="head">
+          <div class="logo"></div>
+          <div href="javascript:;" class="userinfo">
+            <img :src="this.BASE_API + /avatar/ + avatar"  class="layui-nav-img">
+            <a @click="openPersonCenter()">你好&nbsp;<span>{{name}}</span></a>
+            <a @click="loginOut" class="layout">退出</a>
+          </div>
+          <ul>
+            <li><a @click="openSysHome()">系统首页</a></li>
+            <li><a @click="openPersonalHome()" class="shouye">个人首页</a></li>
+            <li><a @click="openSubmit()">论文提交</a></li>
+          </ul>
 
-      <!-- 步骤条 -->
-      <el-steps :active="1">
-        <el-step title="论文提交" icon="el-icon-upload"></el-step>
-        <el-step title="导师审核" icon="el-icon-edit-outline"></el-step>
-        <el-step title="研究院审核" icon="el-icon-edit-outline"></el-step>
-        <el-step title="论文编目" icon="el-icon-circle-check"></el-step>
-      </el-steps>
+        </div>
+        <!-- 步骤条 -->
+        <div class="steps">
+          <el-steps :active="active" finish-status="success" align-center>
+            <el-step title="论文提交" ></el-step>
+            <el-step title="导师审核" ></el-step>
+            <el-step title="研究生院审核" ></el-step>
+            <el-step title="论文编目" ></el-step>
+          </el-steps>
+        </div>
+        <el-form>
 
-      <el-form>
+          <el-form-item>
+            <el-upload
+              :headers="headers"
+              :before-remove="beforeRemove"
+              ref="thesis-upload"
+              :on-remove="onRemove"
+              :limit="1"
+              :on-success="uploadSuccess"
+              :action="BASE_API+'/thesis/uploadThesis'">
+              <div class="submit">
+                <el-button icon="el-icon-upload" type="success" round>论文上传</el-button>
+                <div class="el-upload__tip">论文格式为[学号+姓名+学院名称+论文名称],且格式为PDF格式</div>
+              </div>
+            </el-upload>
+          </el-form-item>
 
-        <el-form-item>
-          <el-upload
-            :headers="headers"
-            :before-remove="beforeRemove"
-            :on-remove="onRemove"
-            :limit="1"
-            :on-success="uploadSuccess"
-            :action="BASE_API+'/thesis/uploadThesis'">
-            <el-button icon="el-icon-upload" type="success" round>论文上传</el-button>
-            <template #tip>
-              <div class="el-upload__tip">论文格式为[学号+姓名+学院名称+论文名称],且格式为PDF格式</div>
-            </template>
-          </el-upload>
-        </el-form-item>
+          <el-row>
+            <el-col :span="10">
+              <el-form-item label="学号" :label-width="formWidth">
+                <el-input v-model="thesis.T_STU_ID" clearable class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
+              </el-form-item>
+            </el-col>
 
-        <el-form-item label="学号" :label-width="formWidth">
-          <el-input v-model="thesis.T_STU_ID" clearable class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
-        </el-form-item>
+            <el-col :span="10">
+              <el-form-item label="导师" :label-width="formWidth">
+                <el-input v-model="thesis.T_TUTOR_NAME" class="input-width" placeholder="请使用;号分隔" @input="change($event)"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
 
-        <el-form-item label="学院名称" :label-width="formWidth">
-          <el-select v-model="thesis.T_COLLEGE_ID" clearable placeholder="请选择学院信息" @change="handlerCollegeChange()">
-            <el-option
-              v-for="item in collegeList"
-              :key="item.T_COLLEGE_ID"
-              :label="item.T_COLLEGE_NAME"
-              :value="item.T_COLLEGE_ID">
-            </el-option>
-          </el-select>
-        </el-form-item>
+          <el-row>
+            <el-col :span="10">
+              <el-form-item label="学院名称" :label-width="formWidth">
+                <el-select v-model="thesis.T_COLLEGE_ID" clearable placeholder="请选择学院信息" @change="handlerCollegeChange()" style="width: 287px">
+                  <el-option
+                    v-for="item in collegeList"
+                    :key="item.T_COLLEGE_ID"
+                    :label="item.T_COLLEGE_NAME"
+                    :value="item.T_COLLEGE_ID">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
 
-        <el-form-item label="专业名称" :label-width="formWidth">
-          <el-select v-model="thesis.T_MAJOR_ID" clearable placeholder="请选择专业信息" @change="handleMajorChange">
-            <el-option
-              v-for="item in majorList"
-              :key="item.T_MAJOR_ID"
-              :label="item.T_MAJOR_NAME"
-              :value="item.T_MAJOR_ID">
-            </el-option>
-          </el-select>
-        </el-form-item>
+            <el-col :span="10">
 
-        <el-form-item label="答辩日期" :label-width="formWidth">
-          <el-col :span="11">
-            <el-date-picker type="date" placeholder="选择日期" v-model="thesis.T_THESIS_DEFENCE_TIME" @input="change($event)"/>
-          </el-col>
-        </el-form-item>
+              <el-form-item label="专业名称" :label-width="formWidth">
+                <el-select v-model="thesis.T_MAJOR_ID" clearable placeholder="请选择专业信息" @change="handleMajorChange" style="width: 287px">
+                  <el-option
+                    v-for="item in majorList"
+                    :key="item.T_MAJOR_ID"
+                    :label="item.T_MAJOR_NAME"
+                    :value="item.T_MAJOR_ID">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
 
-        <el-form-item label="学位年度" :label-width="formWidth">
-          <el-date-picker
-            v-model="thesis.T_THESIS_FIN_TIME"
-            type="year"
-            value-format="yyyy"
-            placeholder="选择年"
-            @input="change($event)">
-          </el-date-picker>
-        </el-form-item>
+          <el-row>
+            <el-col :span="10">
+              <el-form-item label="答辩日期" :label-width="formWidth">
+                <el-col :span="11">
+                  <el-date-picker type="date" placeholder="选择日期" v-model="thesis.T_THESIS_DEFENCE_TIME" @input="change($event)" style="width: 287px"/>
+                </el-col>
+              </el-form-item>
+            </el-col>
 
-        <el-form-item label="分类号" :label-width="formWidth">
-          <el-input v-model="thesis.T_CH_LIB_CLASS" class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
-        </el-form-item>
+            <el-col :span="10">
 
-        <el-form-item label="导师" :label-width="formWidth">
-          <el-input v-model="thesis.T_TUTOR_NAME" class="input-width" placeholder="请使用;号分隔" @input="change($event)"/>
-        </el-form-item>
+              <el-form-item label="学位年度" :label-width="formWidth">
+                <el-date-picker
+                  v-model="thesis.T_THESIS_FIN_TIME"
+                  type="year"
+                  value-format="yyyy"
+                  placeholder="选择年"
+                  @input="change($event)"
+                  style="width: 287px">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
 
-        <el-form-item label="学科" :label-width="formWidth">
-          <el-cascader
-            v-model="subjectCode"
-            :options="options"
-            @change="handleChange"
-            @active-item-change="handleExpandChange"
-            clearable
-            :placeholder="subjectValue"
-            @input="change($event)"
-            width="100px"/>
-        </el-form-item>
+          <el-row>
+            <el-col :span="10">
+              <el-form-item label="分类号" :label-width="formWidth">
+                <el-input v-model="thesis.T_CH_LIB_CLASS" class="input-width" placeholder="上传论文后可自动回显" @input="change($event)" style="width: 287px"/>
+              </el-form-item>
+            </el-col>
 
-        <el-form-item label="保密程度" :label-width="formWidth">
-          <el-select v-model="secercyValue" clearable placeholder="请选择保密程度" @change="handlerSecercyChange" @input="change($event)">
-            <el-option
-              v-for="item in secrecyLevel"
-              :key="item.id"
-              :label="item.value"
-              :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item>
+            <el-col :span="4">
+              <el-form-item label="论文页数" :label-width="formWidth">
+                <el-input v-model="thesis.T_THESIS_PAGE_NUMBER" @input="change($event)" placeholder="上传论文后可自动回显" style="width: 287px"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
 
-        <el-form-item label="研究方向" :label-width="formWidth">
-          <el-input v-model="thesis.T_RESEARCH_DIRE" class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
-        </el-form-item>
+          <el-row>
+            <el-col :span="10">
+              <el-form-item label="学科" :label-width="formWidth">
+                <el-select v-model="thesis.T_SUBJECT_CODE" clearable placeholder="请选择学科信息" @input="change($event)" style="width: 287px">
+                  <el-option
+                    v-for="item in subjectList"
+                    :key="item.T_SUBJECT_CODE"
+                    :label="item.T_SUBJECT_NAME"
+                    :value="item.T_SUBJECT_CODE">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
 
-        <el-form-item label="论文题目" :label-width="formWidth">
-          <el-input v-model="thesis.T_THESIS_ZH_TITLE" class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
-        </el-form-item>
+            <el-col :span="10">
+              <el-form-item label="保密程度" :label-width="formWidth">
+                <el-select v-model="thesis.T_SECRECY_LEVEL" clearable placeholder="请选择保密程度" @input="change($event)" style="width: 287px">
+                  <el-option
+                    v-for="item in secrecyLevel"
+                    :key="item.id"
+                    :label="item.value"
+                    :value="item.id"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
 
-        <el-form-item label="英文题目" :label-width="formWidth">
-          <el-input v-model="thesis.T_THESIS_EN_TITLE" class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
-        </el-form-item>
+          <el-form-item label="研究方向" :label-width="formWidth">
+            <el-input v-model="thesis.T_RESEARCH_DIRE" class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
+          </el-form-item>
 
-        <el-form-item label="关键词" :label-width="formWidth">
-          <el-input v-model="thesis.T_THESIS_ZH_KEY" class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
-        </el-form-item>
+          <el-form-item label="论文题目" :label-width="formWidth">
+            <el-input v-model="thesis.T_THESIS_ZH_TITLE" class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
+          </el-form-item>
 
-        <el-form-item label="英文关键词" :label-width="formWidth">
-          <el-input v-model="thesis.T_THESIS_EN_KEY" class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
-        </el-form-item>
+          <el-form-item label="英文题目" :label-width="formWidth">
+            <el-input v-model="thesis.T_THESIS_EN_TITLE" class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
+          </el-form-item>
 
-        <el-form-item label="论文页数" :label-width="formWidth">
-          <el-input v-model="thesis.T_THESIS_PAGE_NUMBER" @input="change($event)"/>
-        </el-form-item>
+          <el-form-item label="关键词" :label-width="formWidth">
+            <el-input v-model="thesis.T_THESIS_ZH_KEY" class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
+          </el-form-item>
 
-        <el-form-item label="摘要(上传论文后可自动回显)"/>
-        <el-form-item label="摘要">
-          <tinymce :height="200" v-model="thesis.T_THESIS_ZH_ABSTRACT"/>
-        </el-form-item>
+          <el-form-item label="英文关键词" :label-width="formWidth">
+            <el-input v-model="thesis.T_THESIS_EN_KEY" class="input-width" placeholder="上传论文后可自动回显" @input="change($event)"/>
+          </el-form-item>
 
-        <el-form-item label="英文摘要(上传论文后可自动回显)"/>
-        <el-form-item label="英文摘要">
-          <tinymce :height="200" v-model="thesis.T_THESIS_EN_ABSTRACT"/>
-        </el-form-item>
+          <el-form-item label="摘要(上传论文后可自动回显)"/>
+          <el-form-item label="摘要">
+            <tinymce :height="200" v-model="thesis.T_THESIS_ZH_ABSTRACT"/>
+          </el-form-item>
 
-        <el-form-item>
-          <el-button type="success" @click="submitThesisInfo()" round>提交</el-button>
-        </el-form-item>
-      </el-form>
+          <el-form-item label="英文摘要(上传论文后可自动回显)"/>
+          <el-form-item label="英文摘要">
+            <tinymce :height="200" v-model="thesis.T_THESIS_EN_ABSTRACT"/>
+          </el-form-item>
 
+          <el-form-item>
+            <el-button type="success" @click="submitThesisInfo()" round class="success">提交</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div class="footer">技术支持：同方知网（北京）技术有限公司山东分公司 </div>
+      <div class="rdown"></div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -152,10 +206,17 @@
   import subjectApi from '@/api/subject/subject'
   //引入富文本编译器
   import Tinymce from '@/components/Tinymce'
+  import { mapGetters } from 'vuex'
 
   export default {
     components: {Tinymce},
     inject: ['reload'],
+    computed: {
+      ...mapGetters([
+        'avatar',
+        'name',
+      ])
+    },
     data() {
       return {
         thesis: {
@@ -179,9 +240,11 @@
           T_THESIS_FIN_TIME: '',
           T_SECRECY_LEVEL: ''
         },
+        active: 1,
         major: {},
         collegeList: {},
         majorList: {},
+        subjectList: {},
         headers: {token: getToken()},
         BASE_API: process.env.BASE_API,
         formWidth: '90px',
@@ -242,18 +305,10 @@
 
       getSubjectInfo() {
         subjectApi.getSubjectByLevel(this.level)
-        .then(result => {
-          const data = result.OUT_DATA.data
-          let pList = []
-          for (var i = 0; i < data.length; i++) {
-            let List = []
-            pList.push({ value: data[i].T_SUBJECT_CODE, label: data[i].T_SUBJECT_NAME, children: List })
-            // for (var n = 0; n < this.categoryList[i].child.length; n++) {
-            //   List.push({ value: this.categoryList[i].child[n].id, label: this.categoryList[i].child[n].name })
-            // }
-          }
-          this.options = pList
-        })
+          .then(result => {
+            const data = result.OUT_DATA.data
+            this.subjectList = data
+          })
       },
 
       getThesisStatusInfo() {
@@ -293,6 +348,10 @@
           })
       },
 
+      clearFiles() {
+        this.$refs['thesis-upload'].clearFiles();
+      },
+
       uploadSuccess(response) {
         const code = response.RETURN_CODE
         if (code !== 10000) {
@@ -301,6 +360,11 @@
             message: response.RETURN_MSG,
             duration: 5 * 1000
           })
+          //清空文件
+          this.clearFiles()
+          //删除服务器文件
+          this.thesis.T_THESIS_URL = response.OUT_DATA.data.thesisUrl
+          this.onRemove()
         }else {
           const loading = this.$loading({
             lock: true,
@@ -364,55 +428,35 @@
           })
       },
 
-      //处理学科代码
-      handleChange(value) {
-        let code = value[2]
-        this.thesis.T_SUBJECT_CODE = code
+      openSubmit() {
+        this.$router.push({path : '/thesis/submit'})
       },
 
-      //处理选中的保密层级
-      handlerSecercyChange(value) {
-        this.thesis.T_SECRECY_LEVEL = value
+      openSysHome() {
+        let routeData = this.$router.resolve({ path: '/home'});
+        window.open(routeData.href, '_blank');
       },
 
-      handleExpandChange(value) {
-        if (value.length > 2) {
-          return
-        }
-        this.subject = {}
-        this.subject.T_SUBJECT_CODE = value[value.length - 1]
-        subjectApi.getSubjectByCond(this.subject)
-        .then(result => {
-          const data = result.OUT_DATA.data
-          let level = data.T_SUBJECT_LEVEL
-          let pList = []
-          for (var i = 0; i < data.T_CHILDREN_SUBJECT_LIST.length; i++) {
-            if (0 == level) {
-              let List = []
-              pList.push({ value: data.T_CHILDREN_SUBJECT_LIST[i].T_SUBJECT_CODE, label: data.T_CHILDREN_SUBJECT_LIST[i].T_SUBJECT_NAME, children: List })
-            }
-            if (1 == level) {
-              pList.push({ value: data.T_CHILDREN_SUBJECT_LIST[i].T_SUBJECT_CODE, label: data.T_CHILDREN_SUBJECT_LIST[i].T_SUBJECT_NAME })
-            }
-          }
-          //遍历第一级选择器
-          for (var i = 0; i < this.options.length; i++) {
-            if (0 == level) {
-              if (this.subject.T_SUBJECT_CODE = this.options[i].value) {
-                this.options[i].children = pList
-              }
-            }
-            if (1 == level) {
-              //遍历二级选择器
-              for (var j = 0; j < this.options[i].children.length; j++) {
-                if (this.subject.T_SUBJECT_CODE = this.options[i].children[j].value) {
-                  this.options[i].children[j].children = pList
-                }
-              }
-            }
-          }
+      openPersonalHome() {
+        this.$router.push({path: '/'})
+      },
+
+      openPersonCenter() {
+        this.$router.push({path: '/userInfo/student'})
+      },
+
+      loginOut() {
+        const loading = this.$loading({
+          lock: true,
+          text: '用户退出中......',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        this.$store.dispatch('LogOut').then(() => {
+          loading.close();
+          location.reload() // 为了重新实例化vue-router对象 避免bug
         })
-      }
+      },
 
     }
   }
@@ -428,5 +472,144 @@
   }
   .tinymce-container {
     line-height: 29px;
+  }
+
+  .submit {
+    margin-top: 50px;
+    margin-left: 50px;
+  }
+  .el-upload__tip {
+    float: right;
+    margin-left: 30px;
+  }
+
+  /* 整体样式 */
+  * {margin: 0;padding: 0;}
+  .clearfix {clear: both;}
+
+  a{text-decoration: none;color: #000;}
+  a:hover{ cursor:pointer;}
+
+  body{
+    font-family:"微软雅黑";
+    font-size:14px;
+    height: 100%;
+  }
+
+  .content{
+    width: 100%;
+    overflow: hidden;
+    margin: 0 auto;
+    background:url("../../../assets/faqImages/bg.png") no-repeat top;
+  }
+
+  .main{
+    width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  .head{
+    width: 100%;
+    overflow: hidden;
+    margin-top: 60px;
+  }
+  .head ul{
+    float: right;
+    list-style: none;
+  }
+  .head ul li{
+    float: left;
+    margin: 0 18px;
+  }
+  .head ul li a{
+    color: #5c63f0;
+    font-size: 24px;
+    font-family: 'Nunito', sans-serif;
+  }
+  .logo{
+    background: url("../../../assets/noticeImg/TPMP.png") no-repeat 0;
+    width: 250px;
+    height: 40px;
+    float: left;
+  }
+
+  .head ul{
+    float: right;
+    list-style: none;
+    margin-right: 100px;
+    line-height: 60px;
+  }
+  .head ul li{
+    float: left;
+    margin: 0 18px;
+  }
+  .head ul li a{
+    color: #5c63f0;
+    font-size: 22px;
+    font-family: 'Nunito', sans-serif;
+  }
+  .shouye {
+    border-bottom: 2px solid #5c63f0;
+  }
+  .userinfo {
+    margin-right: 10px;
+    float: right;
+    width: 220px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    font-size: 18px;
+  }
+  .userinfo a {
+    color:#5c63f0;;
+  }
+  .layout {
+    margin-left: 20px;
+  }
+
+  .layui-nav-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .rdown{
+    position:fixed;
+    right: 0;
+    bottom: 0;
+    background: url("../../../assets/noticeImg/rdown.png") no-repeat 0;
+    width: 79px;
+    height: 79px;
+  }
+
+  .footer{
+    width: 1200px;
+    overflow: hidden;
+    margin: 0 auto;
+    text-align: center;
+    line-height: 92px;
+    color: #aaa;
+    background: url("../../../assets/noticeImg/ldown.png") no-repeat 0;
+    margin-top: 55px;
+  }
+
+  /* 主体区域 */
+  .steps {
+    padding-top: 80px;
+  }
+
+  .el-form-item{
+    margin-bottom: 30px;
+  }
+
+  .submit{
+    margin-left: 100px;
+  }
+
+  .success {
+    float: right;
+    margin-right: 50px;
   }
 </style>

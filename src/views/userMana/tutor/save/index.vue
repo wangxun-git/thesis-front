@@ -56,7 +56,6 @@
   import tutorApi from '@/api/collegeTutor/tutor.js'
   import stuTypeApi from '@/api/stutype/stutype.js'
   import collegeApi from '@/api/collegeTutor/college.js'
-  import tutor from "../../../../api/collegeTutor/tutor";
 
     export default {
         name: "index",

@@ -5,12 +5,23 @@
         <!-- 头部区域 -->
         <div class="head">
           <div class="logo"></div>
+          <div href="javascript:;" class="userinfo">
+            <img :src="this.BASE_API + /avatar/ + avatar"  class="layui-nav-img">
+            <a @click="openPersonCenter()">你好&nbsp;<span>{{name}}</span></a>
+            <a @click="loginOut" class="layout">退出</a>
+          </div>
+          <ul>
+            <li><a @click="openSysHome()">系统首页</a></li>
+            <li><a herf="/" class="shouye">个人首页</a></li>
+            <li><a @click="openSubmit()">论文提交</a></li>
+          </ul>
+
         </div>
         <!-- 页面主体区域 -->
         <div class="stepBox">
           <div class="state"><h1>论文状态</h1><span>({{thesisStatusName}})</span></div>
           <div class="steps">
-            <el-steps :active="active" finish-status="success" >
+            <el-steps :active="active" finish-status="success" align-center>
               <el-step title="论文提交" ></el-step>
               <el-step title="导师审核" ></el-step>
               <el-step title="研究生院审核" ></el-step>
@@ -52,16 +63,23 @@
 </template>
 
 <script>
-
+  import { mapGetters } from 'vuex'
   import homeApi from '@/api/system/home.js'
 
   export default {
 
+    computed: {
+      ...mapGetters([
+        'avatar',
+        'name',
+      ])
+    },
 
     data() {
       return {
         active: 2,
         thesisStatusName: '已提交',
+        BASE_API: process.env.BASE_API,
       }
     },
 
@@ -74,15 +92,24 @@
 
       getThesisStatusInfoByToken() {
         homeApi.getThesisStatusByToken()
-        .then(result => {
-          const data = result.OUT_DATA.data
-          this.active = data.active
-          this.thesisStatusName = data.statusName
-        })
+          .then(result => {
+            const data = result.OUT_DATA.data
+            this.active = data.active
+            this.thesisStatusName = data.statusName
+          })
       },
 
       openSubmit() {
         this.$router.push({path : '/thesis/submit'})
+      },
+
+      openSysHome() {
+        let routeData = this.$router.resolve({ path: '/home'});
+        window.open(routeData.href, '_blank');
+      },
+
+      openPersonCenter() {
+        this.$router.push({path: '/userInfo/student'})
       },
 
       //下载论文模板
@@ -104,7 +131,21 @@
           }).catch(error => {
           console.error(error)
         })
-      }
+      },
+
+      loginOut() {
+        const loading = this.$loading({
+          lock: true,
+          text: '用户退出中......',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        this.$store.dispatch('LogOut').then(() => {
+          loading.close();
+          location.reload() // 为了重新实例化vue-router对象 避免bug
+        })
+      },
+
     }
   }
 </script>
@@ -161,6 +202,51 @@
     float: left;
   }
 
+  .head ul{
+    float: right;
+    list-style: none;
+    margin-right: 100px;
+    line-height: 60px;
+  }
+  .head ul li{
+    float: left;
+    margin: 0 18px;
+  }
+  .head ul li a{
+    color: #5c63f0;
+    font-size: 22px;
+    font-family: 'Nunito', sans-serif;
+  }
+  .shouye {
+    border-bottom: 2px solid #5c63f0;
+  }
+  .userinfo {
+    // margin-right: 15px;
+    float: right;
+    width: 220px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    font-size: 18px;
+
+  }
+  .userinfo a {
+    color:#5c63f0;
+    overflow: visible;
+  }
+
+  .layui-nav-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .layout {
+    margin-left: 20px;
+  }
+
+
   .rdown{
     position:fixed;
     right: 0;
@@ -178,15 +264,15 @@
     line-height: 92px;
     color: #aaa;
     background: url("../../../assets/noticeImg/ldown.png") no-repeat 0;
-    margin-top: 55px;
+    margin-top: 97px;
   }
 
   // 主体部分css
   .stepBox {
     margin-top: 150px;
     height: 80px;
-    border-top: 2px solid #b8b8b8;
-    border-bottom: 2px solid #b8b8b8;
+    border-top: 1px solid #b8b8b8;
+    border-bottom: 1px solid #b8b8b8;
     position: relative;
   }
 

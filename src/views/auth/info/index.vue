@@ -1,15 +1,43 @@
 <template>
     <div class="app-container">
 <!--      <router-view/>-->
+
+      <el-form :inline="true" class="demo-from-inline">
+        <el-form-item label="权限角色">
+          <el-select v-model="user.T_ROLE_ID" clearable placeholder="请选择权限角色">
+            <el-option
+              v-for="item in roles"
+              :key="item.T_ROLE_ID"
+              :label="item.T_ROLE_NAME"
+              :value="item.T_ROLE_ID">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+<!--        <el-form-item label="用户账号">-->
+<!--          <el-input v-model="user.T_USER_ID" clearable placeholder="请选择用户账号"/>-->
+<!--        </el-form-item>-->
+
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" @click="getPerInfosByCond()">查询</el-button>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="warning" @click="resetData()">清空</el-button>
+        </el-form-item>
+
+      </el-form>
+
       <el-table
         :data="list"
         style="width: 100%"
         row-key="T_PER_ID"
         border
         default-expand-all
+        :row-class-name="tableRowClassName"
         :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
 
-        <el-table-column label="名称" prop="T_PER_NAME" sortable/>
+        <el-table-column fixed label="名称" prop="T_PER_NAME" sortable/>
         <el-table-column label="访问路径" prop="T_PATH" sortable/>
         <el-table-column label="组件路径" prop="T_COMPONENT" sortable/>
 
@@ -54,6 +82,7 @@
         name: "index",
       data() {
           return {
+            user: {},
             list: [],
             defaultProps: {
               children: 'children',
@@ -62,7 +91,8 @@
             dialogFormVisible: false,
             rolePer: {},
             perId: '',
-            roleList: {}
+            roleList: {},
+            roles: {},
           }
       },
 
@@ -74,6 +104,17 @@
       },
 
       methods: {
+        //设置行颜色
+        tableRowClassName({row, rowIndex}) {
+          if (row.LEVEL == 1) {
+            return 'success-row-1'
+          }
+          if (row.LEVEL == 2) {
+            return 'success-row'
+          }
+          return ''
+        },
+
         getPermissionInfo() {
           permissionApi.getPermissions()
           .then(result => {
@@ -86,6 +127,7 @@
           roleApi.getRoles()
           .then(result => {
             this.roleList = result.OUT_DATA.data
+            this.roles = result.OUT_DATA.data
           })
         },
 
@@ -106,11 +148,30 @@
               })
             }
           })
+        },
+
+        getPerInfosByCond() {
+          roleApi.getRolesByUser(this.user)
+          .then(result => {
+            const data = result.OUT_DATA.data
+            this.list = data
+          })
+        },
+
+        resetData() {
+          this.user = {}
+          this.getPermissionInfo()
         }
       }
     }
 </script>
 
-<style scoped>
+<style>
+  .el-table .success-row-1 {
+    background: #579cf6;
+  }
 
+  .el-table .success-row {
+    background: #f0f9eb;
+  }
 </style>

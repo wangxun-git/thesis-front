@@ -49,6 +49,7 @@
       <el-form-item>
         <el-upload
           :headers="headers"
+          ref="file-import"
           :before-remove="beforeRemove"
           :limit="1"
           :on-success="uploadSuccess"
@@ -252,6 +253,10 @@
         });
       },
 
+      clearFiles() {
+        this.$refs['file-import'].clearFiles();
+      },
+
       uploadSuccess(response) {
         const code = response.RETURN_CODE
         if (code !== 10000) {
@@ -260,11 +265,13 @@
             message: response.RETURN_MSG,
             duration: 5 * 1000
           })
+          this.clearFiles()
         }else {
           this.$message({
             type: "success",
             message: "添加成功"
           })
+          this.getStudentInfo()
         }
       },
 

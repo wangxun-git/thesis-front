@@ -8,7 +8,7 @@
         </el-form-item>
 
         <el-form-item label="院系名称">
-          <el-select v-model="collegeId" clearable placeholder="请选择" @change="handlerSelectCollege">
+          <el-select v-model="collegeId" clearable placeholder="请选择学院" @change="handlerSelectCollege">
             <el-option
               v-for="item in collegeList"
               :key="item.T_COLLEGE_ID"

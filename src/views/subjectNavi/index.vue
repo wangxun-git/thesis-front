@@ -256,19 +256,32 @@
       },
 
       selectAllYear(val) {
-        this.yearIdList = this.yearList
+        if (this.yearIdList.length == this.yearList.length) {
+          this.yearIdList = []
+        }else {
+          this.yearIdList = this.yearList
+        }
       },
 
       selectAllSubject(val) {
-        this.subjectIdCheckList = []
-        for (let i = 0; i < this.subjectList.length; i++) {
-          this.subjectIdCheckList.push(this.subjectList[i].T_SUBJECT_CODE)
+        if (this.subjectIdCheckList.length == this.subjectList.length) {
+          this.subjectIdCheckList = []
+        }else {
+          this.subjectIdCheckList = []
+          for (let i = 0; i < this.subjectList.length; i++) {
+            this.subjectIdCheckList.push(this.subjectList[i].T_SUBJECT_CODE)
+          }
         }
       },
 
       selectAllCollege() {
-        for (let i = 0; i < this.collegeList.length; i++) {
-          this.collegeIdCheckList.push(this.collegeList[i].T_COLLEGE_ID)
+        if (this.collegeIdCheckList.length == this.collegeList.length) {
+          this.collegeIdCheckList = []
+        }else {
+          this.collegeIdCheckList = []
+          for (let i = 0; i < this.collegeList.length; i++) {
+            this.collegeIdCheckList.push(this.collegeList[i].T_COLLEGE_ID)
+          }
         }
       },
 

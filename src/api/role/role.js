@@ -8,6 +8,14 @@ export default {
     })
   },
 
+  getRolesByUser(user) {
+    return request({
+      url: '/auth/getCondMenu',
+      method: 'post',
+      data: user
+    })
+  },
+
   getRolesByCond(role) {
     return request({
       url: '/auth/getCondRoles',

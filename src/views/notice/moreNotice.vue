@@ -30,14 +30,14 @@
           </a>
         </div>
 
-        <el-drawer
-          :title="drawerTitle"
-          :visible.sync="showDrawer"
-          direction="rtl"
-          size="40%">
-          <p v-html="context"></p>
-          <a class="file" v-html="noticeFileName" @click="downloadNotice"></a>
-        </el-drawer>
+<!--        <el-drawer-->
+<!--          :title="drawerTitle"-->
+<!--          :visible.sync="showDrawer"-->
+<!--          direction="rtl"-->
+<!--          size="40%">-->
+<!--          <p v-html="context"></p>-->
+<!--          <a class="file" v-html="noticeFileName" @click="downloadNotice"></a>-->
+<!--        </el-drawer>-->
 
         <!-- 分页组件 -->
         <div class="page">
@@ -71,7 +71,7 @@
         page: 1,
         limit: 5,
         total: 0,
-        showDrawer: false,
+        // showDrawer: false,
         drawerTitle: '',
         context: '',
         noticeFileName: '',
@@ -111,25 +111,28 @@
       },
 
       changeShow(noticeId) {
+        let routeData = this.$router.resolve({ path: '/notice', query: {id: noticeId} });
+        window.location.href = routeData.href
+        // window.open(routeData.href, '_blank');
         // this.showDrawer = !this.showDrawer
         //遍历数据集合
-        for (let i = 0; i < this.list.length; i++) {
-          if (noticeId == this.list[i].T_NOTICE_ID) {
-            this.drawerTitle = this.list[i].T_NOTICE_TITLE
-            this.context = this.list[i].T_NOTICE_CONTEXT
-            if (this.list[i].T_NOTICE_FILE != '' && this.list[i].T_NOTICE_FILE != null) {
-              this.noticeFileName = '<br/><br/>' + '通知文件: ' + this.list[i].T_NOTICE_FILE
-            }else {
-              this.noticeFileName = ''
-            }
-            if (this.list[i].T_NOTICE_ID != null && this.list[i].T_NOTICE_ID != '') {
-              this.noticeId = this.list[i].T_NOTICE_ID
-            }else {
-              this.noticeId = ''
-            }
-          }
-        }
-        this.showDrawer = true
+        // for (let i = 0; i < this.list.length; i++) {
+        //   if (noticeId == this.list[i].T_NOTICE_ID) {
+        //     this.drawerTitle = this.list[i].T_NOTICE_TITLE
+        //     this.context = this.list[i].T_NOTICE_CONTEXT
+        //     if (this.list[i].T_NOTICE_FILE != '' && this.list[i].T_NOTICE_FILE != null) {
+        //       this.noticeFileName = '<br/><br/>' + '通知文件: ' + this.list[i].T_NOTICE_FILE
+        //     }else {
+        //       this.noticeFileName = ''
+        //     }
+        //     if (this.list[i].T_NOTICE_ID != null && this.list[i].T_NOTICE_ID != '') {
+        //       this.noticeId = this.list[i].T_NOTICE_ID
+        //     }else {
+        //       this.noticeId = ''
+        //     }
+        //   }
+        // }
+        // this.showDrawer = true
       },
 
       //下载通知文件

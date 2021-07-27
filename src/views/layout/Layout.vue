@@ -1,24 +1,27 @@
 <template>
   <div :class="classObj" class="app-wrapper">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"/>
-    <sidebar class="sidebar-container"/>
-    <div class="main-container">
+    <!-- 解决学生端退出显示左侧导航菜单问题 -->
+    <sidebar class="sidebar-container" v-if="roles == 'admin' || roles == 'tutor' || roles == 'library-admin'"/>
+    <div class="main-container" v-if="roles == 'admin' || roles == 'tutor' || roles == 'library-admin'">
       <navbar/>
       <app-main/>
     </div>
+    <app-main v-if="roles == 'student'"/>
   </div>
 </template>
 
 <script>
 import { Navbar, Sidebar, AppMain } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Layout',
   components: {
     Navbar,
     Sidebar,
-    AppMain
+    AppMain,
   },
   mixins: [ResizeMixin],
   computed: {
@@ -35,7 +38,10 @@ export default {
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile'
       }
-    }
+    },
+    ...mapGetters([
+      'roles'
+    ])
   },
   methods: {
     handleClickOutside() {

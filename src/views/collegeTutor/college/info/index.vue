@@ -5,7 +5,7 @@
       <el-form :inline="true" class="demo-from-inline">
 
         <el-form-item label="学院名称">
-          <el-input v-model="college.T_COLLEGE_NAME"></el-input>
+          <el-input v-model="college.T_COLLEGE_NAME" clearable></el-input>
         </el-form-item>
 
         <el-form-item>

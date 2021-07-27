@@ -5,16 +5,28 @@
       <el-form ref="thesis" :inline="true" class="demo-from-inline">
 
         <el-form-item>
-          <el-input v-model="thesis.T_STU_ID" placeholder="作者学号"></el-input>
+          <el-input v-model="thesis.T_STU_ID" clearable placeholder="作者学号"></el-input>
         </el-form-item>
 
         <el-form-item>
-          <el-input v-model="thesis.T_STU_NAME" placeholder="作者名称"></el-input>
+          <el-input v-model="thesis.T_STU_NAME" clearable placeholder="作者名称"></el-input>
+        </el-form-item>
+
+        <el-form-item>
+          <el-input v-model="thesis.T_THESIS_ZH_TITLE" clearable placeholder="论文题目"></el-input>
         </el-form-item>
 
         <el-form-item>
           <el-select v-model="thesis.T_THESIS_STATUS" clearable placeholder="请选择审核状态">
             <el-option
+              v-if="roles == 'tutor'"
+              v-for="item in tutorThesisStatusList"
+              :key="item.key"
+              :label="item.value"
+              :value="item.key">
+            </el-option>
+            <el-option
+              v-if="roles != 'tutor'"
               v-for="item in thesisStatusList"
               :key="item.key"
               :label="item.value"
@@ -125,14 +137,14 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="审核原因">
+          <el-form-item label="审核原因(审核不通过需填充原因)">
             <el-input v-model="approvedThesis.T_THESIS_APPR_REASON" size="small" type="textarea" :rows="2"></el-input>
           </el-form-item>
 
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false, approvedThesisInfo()">确 定</el-button>
+          <el-button type="primary" @click="approvedThesisInfo()">确 定</el-button>
         </div>
       </el-dialog>
 
@@ -152,9 +164,14 @@
 <script>
   import collegeApi from '@/api/collegeTutor/college.js'
   import thesisApi from '@/api/thesis/thesis.js'
+  import { mapGetters } from 'vuex'
 
     export default {
-        name: "info",
+      computed: {
+        ...mapGetters([
+          'roles'
+        ])
+      },
       data() {
           return {
             loading: true,
@@ -184,10 +201,10 @@
                 value: '审核不通过'
               }
             ],
-            thesisStatusList: [  //审核状态
+            tutorThesisStatusList: [  //审核状态
               {
                 key: 0,
-                value: '等待审核'
+                value: '正在审核'
               },
               {
                 key: 1,
@@ -196,6 +213,32 @@
               {
                 key: 2,
                 value: '审核不通过'
+              },
+            ],
+            thesisStatusList: [
+              {
+                key: 0,
+                value: '等待导师审核'
+              },
+              {
+                key: 2,
+                value: '导师审核不通过'
+              },
+              {
+                key: 5,
+                value: '研究院审核中'
+              },
+              {
+                key: 7,
+                value: '研究院审核不通过'
+              },
+              {
+                key: 3,
+                value: '等待编目'
+              },
+              {
+                key: 4,
+                value: '编目完成'
               }
             ]
           }
@@ -255,15 +298,34 @@
           this.approvedThesis.T_THESIS_ID = thesisId
         },
 
+        checkAppr() {
+          if (this.approvedThesis.T_THESIS_APPR_STATUS == 0) {  //审核不通过需要填充原因
+            if (this.approvedThesis.T_THESIS_APPR_REASON == '' || this.approvedThesis.T_THESIS_APPR_REASON == null) {
+              this.$message({
+                type: "error",
+                message: "审核不通过需填充原因"
+              })
+              return true
+            }
+          }
+          return false
+        },
+
         //审核文件
         approvedThesisInfo() {
+          //校验审核
+          if (this.checkAppr()) {
+            return;
+          }
           thesisApi.approvedThesis(this.approvedThesis)
           .then(result => {
             this.$message({
               type: "success",
               message: "审核成功"
             })
+            this.approvedThesis = {}
             this.getThesisInfo();
+            this.dialogFormVisible = false
           })
         },
 

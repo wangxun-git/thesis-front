@@ -168,6 +168,7 @@
   import subjectApi from '@/api/subject/subject'
   import homeApi from '@/api/system/home'
   import login from '../common/login'
+  import { getToken } from '@/utils/auth'
 
   export default {
 
@@ -389,6 +390,24 @@
       },
 
       handleLogin() {
+        //校验是否本浏览器是否存在登录
+        if (getToken()) {
+          //如果是相同账号
+          if (this.user.T_USER_ID == this.$store.state.user.id) {
+            this.$router.push({path: '/'})
+          }else {
+            this.$message({
+              type: "error",
+              message: "存在已登录用户,请先退出",
+              duration: 2000
+            })
+            this.$router.push({path: '/'})
+          }
+        }else {
+          this.userLogin()
+        }
+      },
+      userLogin() {
         const loading = this.$loading({
           lock: true,
           text: '页面装填中......',
@@ -418,7 +437,7 @@
             return false;
           }
         });
-      }
+      },
     }
   }
 </script>
