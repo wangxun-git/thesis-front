@@ -42,28 +42,9 @@
               <ul class="hang">
                 <el-checkbox-group v-model="yearIdList"  >
                   <li v-for="year in yearList" :key="year">
-                    <!--                  <label>-->
-                    <!--                    <input type="checkbox" name="num">-->
-                    <!--                    <span class="checkbox">-->
-                    <!--                      <i>&check;</i>-->
-                    <!--                    </span>-->
-                    <!--                    <span class="item">马克思主义学院</span>-->
-
                     <el-checkbox :label="year">{{year}}</el-checkbox>
-                    <!--                  </label>-->
                   </li>
                 </el-checkbox-group>
-<!--                <li>-->
-
-<!--                  <label>-->
-<!--                    <input type="checkbox" name="num">-->
-<!--                    <span class="checkbox">-->
-<!--                      <i>&check;</i>-->
-<!--                    </span>-->
-<!--                    <span class="item">2021年</span>-->
-<!--                  </label>-->
-
-<!--                </li>-->
               </ul>
             </div>
             <div class="dy">
@@ -109,7 +90,11 @@
 
               <el-table-column label="学生类型" prop="T_STU_TYPE_NAME" width="80" align="center"/>
 
-              <el-table-column label="题名" prop="T_THESIS_ZH_TITLE" width="" align="center" :show-overflow-tooltip='true'/>
+              <el-table-column label="题名"width="" align="center" :show-overflow-tooltip='true'>
+                <template slot-scope="scope">
+                  <el-link type="primary" :underline="false" @click="openStaticThesis(scope.row.T_THESIS_ID)">{{scope.row.T_THESIS_ZH_TITLE}}</el-link>
+                </template>
+              </el-table-column>
 
               <el-table-column label="答辩时间" prop="T_THESIS_DEFENCE_TIME" align="center" width="110" sortable/>
 
@@ -319,6 +304,11 @@
           this.list = data.data
           this.loading = false
         });
+      },
+
+      openStaticThesis(thesisId) {
+        let routeData = this.$router.resolve({ path: '/thesisInfo', query: {id: thesisId, flag: 1} });
+        window.open(routeData.href, '_blank');
       }
 
     }

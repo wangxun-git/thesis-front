@@ -138,6 +138,7 @@
             const data = result.OUT_DATA.data
             if (data == null) {
               this.degreeList = {}
+              this.student.T_STU_DEGREE_ID = ''
             }else {
               this.degreeList = data.data
               this.student.T_STU_DEGREE_ID = this.degreeList[0].T_STU_DEGREE_ID

@@ -66,6 +66,14 @@ export const constantRoutes = [
     hidden: true
   },
 
+  {
+    path: '/thesisInfo',
+    name: '论文详情',
+    meta: {title: '论文详情'},
+    component: () => import('@/views/thesis/staticThesis/index'),
+    hidden: true
+  },
+
   //首页
   {
     path: '/',
@@ -361,16 +369,23 @@ export const asyncRoutes = [ // 通过路由元信息meta.roles来设置访问�
   {
     path: '/statMana',
     component: Layout,
-    redirect: '/statMana/loginSata',
     name: '统计管理',
     meta: {title: '统计管理', icon: 'stat'},
     children: [
       {
         path: 'loginSata',
-        component: () => import('@/views/statMana/loginSata'),
+        component: () => import('@/views/statMana/index'),
         name: '登录统计',
-        meta: {title: '登录统计', icon: 'loginStat'},
-        nocache: true
+        meta: {title: '登录统计', icon: 'loginSata'},
+        nocache: true,
+        children: [
+          {
+            path: 'loginSata',
+            component: () => import('@/views/statMana/loginSata'),
+            name: '登录统计',
+            meta: {title: '登录统计', icon: 'loginSata'},
+          }
+        ]
       },
       {
         path: 'thesisSata',

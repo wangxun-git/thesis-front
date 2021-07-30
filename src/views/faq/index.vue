@@ -313,7 +313,7 @@
   }
 
   .BT{
-    width: 394px;
+    width: 420px;
     height: 44px;
     background: url("../../assets/faqImages/faq.png") no-repeat 0;
     float: left;

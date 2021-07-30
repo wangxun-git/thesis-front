@@ -105,16 +105,12 @@
             </el-form-item>
 
             <el-form-item>
-              <el-button size="mini" type="success" round @click="saveThreeSubject()">保存</el-button>
+              <el-button type="success" round @click="saveThreeSubject()">保存</el-button>
             </el-form-item>
           </el-form>
         </el-tab-pane>
       </el-tabs>
 
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-      </div>
     </el-dialog>
 
   </div>
@@ -122,7 +118,6 @@
 
 <script>
 
-  let id = 1000
   import subjectApi from '@/api/subject/subject'
 
   export default {

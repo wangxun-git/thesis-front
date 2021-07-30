@@ -5,7 +5,11 @@
       <el-form :inline="true" class="demo-from-inline">
 
         <el-form-item label="学院名称">
-          <el-input v-model="college.T_COLLEGE_NAME" clearable></el-input>
+          <el-input v-model="college.T_COLLEGE_NAME" clearable @keyup.enter.native="getCollegeInfoListByCond()"></el-input>
+        </el-form-item>
+
+        <el-form-item style="margin-bottom:0;display:none;">
+          <el-input></el-input>
         </el-form-item>
 
         <el-form-item>
@@ -30,7 +34,6 @@
             <el-button icon="el-icon-upload">导入</el-button>
           </el-upload>
         </el-form-item>
-
       </el-form>
 
 

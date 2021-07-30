@@ -48,10 +48,19 @@
             element-loading-background="rgba(0, 0, 0, 0.5)">
 
             <el-table-column label="序号" width="50" type="index" align="center"/>
+
             <el-table-column label="学号" prop="T_STU_ID" align="center" width="120"/>
+
             <el-table-column label="作者" prop="T_STU_NAME" align="center" width="100"/>
+
             <el-table-column label="学生类型" prop="T_STU_TYPE_NAME" width="80" align="center"/>
-            <el-table-column label="题名" prop="T_THESIS_ZH_TITLE" width="" align="center" :show-overflow-tooltip='true'/>
+
+            <el-table-column label="题名" prop="T_THESIS_ZH_TITLE" width="" align="center" :show-overflow-tooltip='true'>
+              <template slot-scope="scope">
+                <el-link type="primary" :underline="false" @click="openStaticThesis(scope.row.T_THESIS_ID)">{{scope.row.T_THESIS_ZH_TITLE}}</el-link>
+              </template>
+            </el-table-column>
+
             <el-table-column label="答辩时间" prop="T_THESIS_DEFENCE_TIME" align="center" width="100"/>
 
           </el-table>
@@ -148,6 +157,11 @@
 
       openXkdh() {
         let routeData = this.$router.resolve({ path: '/xkdh'});
+        window.open(routeData.href, '_blank');
+      },
+
+      openStaticThesis(thesisId) {
+        let routeData = this.$router.resolve({ path: '/thesisInfo', query: {id: thesisId} });
         window.open(routeData.href, '_blank');
       },
 
